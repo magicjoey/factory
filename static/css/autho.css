@@ -1,0 +1,15 @@
+.search-header {
+    width: 150px;
+    margin-right: 50px;
+}
+.panel-default > .panel-heading{
+    background: #dddddd;
+}
+h3 > span {
+    border-bottom: none;
+    display: inline-block;
+    padding: 0 5px 5px;
+}
+.btn{
+    border-bottom: none;
+}

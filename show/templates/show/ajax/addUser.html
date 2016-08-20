@@ -1,0 +1,136 @@
+{% load staticfiles %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}"/>
+{% endblock %}
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" user="dialog" style="display:block;    background-color: transparent;    top: 10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                       {% if "edit" == mode and user != null %}
+                            修改员工
+                        {% else %}
+                            新增员工
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/auth_ajaxAddUser"  parsley-validate parsley-bind>
+                            {% csrf_token %}
+                       {% if "edit" == mode and user != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="id" value="{{ user.id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">员工名称</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="nickName"
+                                           placeholder="请输入员工昵称" parsley-required="true"
+                       {% if "edit" == mode and user != null %}value="{{ user.nickName }}" {% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">登陆手机号</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="phoneNo"
+                                           placeholder="请输入登陆手机号" parsley-required="true" parsley-type="digits"
+                                    {% if "edit" == mode and user != null %}readonly="readonly" value="{{ user.phoneNo }}" {% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label
+                                    class="col-lg-2 control-label">登陆密码</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="password"
+                                           placeholder="请输入登陆密码" parsley-required="true"
+                                    {% if "edit" == mode and user != null %}value="{{ user.password }}" {% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                {% if "edit" == mode and user != null %}
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                                {% else %}
+                                <button class="btn btn-primary btn btn-warn" id="nextStepBtn" type="submit">下一步</button>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static "plugins/form/form.js" %}"></script>
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+    $("#formAjaxId").submit(function(e){
+         if (typeof  $(this).attr("parsley-validate") != 'undefined') {
+                    var $valid = $(this).parsley('validate');
+                    if (!$valid) {
+                        e.preventDefault();
+                        return false;
+                    }else{
+                        e.preventDefault();
+                        $.ajax({
+                            url:$("#formAjaxId").attr("action"),
+                            data:$("#formAjaxId").serialize(),
+                            type:"POST",
+                            success:function(e){
+                                if(e.status == "S"){
+                                    $("#ajaxModule button.close").click();
+                                    ajaxAllot(e.userId);
+                                }else{
+                                    alert(e.msg);
+                                }
+                            }
+
+                        })
+                    }
+                }
+    })
+
+{#    $("#ajaxModule form").submit(function(e){#}
+{#        e.preventDefault();#}
+{#        if (!$(this).parsley('validate')) {#}
+{#//            e.preventDefault();#}
+{#        }else {#}
+{#            $.ajax({#}
+{#                url: $(this).attr("action"),#}
+{#                type: "post",#}
+{#                data: $(this).serialize(),#}
+{#                success: function (e) {#}
+{#                    $("#ajaxModule").fadeOut();#}
+{#                    $("#ajaxModule").remove();#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    });#}
+
+
+</script>

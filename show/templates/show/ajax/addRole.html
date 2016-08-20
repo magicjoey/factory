@@ -1,0 +1,88 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;    top: 10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                       {% if "edit" == mode and role != null %}
+                            修改角色
+                        {% else %}
+                            新增角色
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/auth_ajaxAddRole">
+                            {% csrf_token %}
+                       {% if "edit" == mode and role != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="role_id" value="{{ role.role_id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">角色名称</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="role_name"
+                                           placeholder="请输入角色名称" parsley-required="true"
+                       {% if "edit" == mode and role != null %}value="{{ role.role_name }}" {% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">角色简称</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="role_shortname"
+                                           placeholder="请输入角色简称" parsley-required="true"
+                                    {% if "edit" == mode and role != null %}value="{{ role.role_shortname }}" {% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+{#    $("#ajaxModule form").submit(function(e){#}
+{#        e.preventDefault();#}
+{#        if (!$(this).parsley('validate')) {#}
+{#//            e.preventDefault();#}
+{#        }else {#}
+{#            $.ajax({#}
+{#                url: $(this).attr("action"),#}
+{#                type: "post",#}
+{#                data: $(this).serialize(),#}
+{#                success: function (e) {#}
+{#                    $("#ajaxModule").fadeOut();#}
+{#                    $("#ajaxModule").remove();#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    });#}
+
+
+</script>

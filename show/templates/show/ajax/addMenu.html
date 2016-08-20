@@ -1,0 +1,158 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;    top: 10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                        {% if "edit" == mode and menu != null %}
+                            编辑菜单
+                        {% else %}
+                            新增菜单
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/auth_ajaxAddMenu">
+                        {% csrf_token %}
+
+                            {% if "edit" == mode and menu != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="menu_id" value="{{ menu.menu_id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">菜单名称</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="menu_title"
+                                           placeholder="请输入菜单名称" parsley-required="true" {% if "edit" == mode and menu != null %}value="{{menu.menu_title}}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">菜单级别</label>
+
+                                <div class="col-lg-10">
+                                    <select name="menu_level" class="form-control"
+                                            type="select"  parsley-required="true">
+                                        {% for menuLevel in menuLeveList %}
+                                        <option value="{{ menuLevel.leve_id }}" {% if "edit" == mode and menu != null and menuLevel.leve_id == menu.menu_level.leve_id %}selected="selected"{% endif %}>
+                                            {{ menuLevel.level_name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">菜单url</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="menu_url"
+                                           placeholder="请输入菜单地址" {% if "edit" == mode and menu != null %}value="{{menu.menu_url}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">父级菜单</label>
+
+                                <div class="col-lg-10">
+                                    <select name="parent_id" class="form-control"
+                                            type="select"  parsley-required="true">
+                                        <option value="0">
+                                           请选择
+                                        </option>
+                                        {%  for parent in parentMenuList %}
+                                            <option value="{{ parent.menu_id }}" {% if "edit" == mode and menu != null and parent.menu_id == menu.parent_id %}selected="selected"{% endif %}>
+                                            {{ parent.menu_title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label
+                                    class="col-lg-2 control-label">菜单权重</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="weight" parsley-required="true" parsley-type="digits"
+                                           placeholder="请输入菜单权重" {% if "edit" == mode and menu != null %}value="{{menu.weight}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label
+                                    class="col-lg-2 control-label">菜单内容</label>
+
+                                <div class="col-lg-10">
+
+                                <textarea name="content"
+                                           class="form-control"
+                                            parsley-required="true" parsley-type="digits"
+                                           placeholder="请输入菜单内容">{% if "edit" == mode and menu != null %}{{menu.content}}{% endif %}</textarea>
+                                </div>
+                            </div>
+
+                         <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">类型</label>
+
+                                <div class="col-lg-10">
+                                    <select name="type" class="form-control"
+                                            type="select"  parsley-required="true">
+                                        <option value="MENU" {% if "edit" == mode and menu != null and "MENU" == menu.type %}selected="selected"{% endif %}>
+                                           菜单
+                                        </option>
+                                    <option value="ACTION" {% if "edit" == mode and menu != null and "ACTION" == menu.type %}selected="selected"{% endif %}>
+                                            动作
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+{#    $("#ajaxModule form").submit(function(e){#}
+{#        e.preventDefault();#}
+{#        if (!$(this).parsley('validate')) {#}
+{#//            e.preventDefault();#}
+{#        }else {#}
+{#            $.ajax({#}
+{#                url: $(this).attr("action"),#}
+{#                type: "post",#}
+{#                data: $(this).serialize(),#}
+{#                success: function (e) {#}
+{#                    $("#ajaxModule").fadeOut();#}
+{#                    $("#ajaxModule").remove();#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    });#}
+
+
+</script>

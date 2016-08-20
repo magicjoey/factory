@@ -1,0 +1,198 @@
+{% extends "show/common/base.html" %}
+{% load staticfiles %}
+{% block content %}
+		<!--
+		/////////////////////////////////////////////////////////////////////////
+		//////////     MAIN SHOW CONTENT     //////////
+		//////////////////////////////////////////////////////////////////////
+		-->
+		<div id="main">
+		
+		
+				<ol class="breadcrumb">
+						<li><a href="#">首页</a></li>
+						<li class="active">入库</li>
+				</ol>
+				<!-- //breadcrumb-->
+				
+				<div id="content">
+				
+						<div class="row">
+						
+								<div class="col-lg-12" >
+
+
+										<h1><strong>入库</strong>  </h1>
+										<label class="color" style="background-color:#edece5"> 步骤流程 </label>
+										<form id="validate-wizard" class="wizard-step">
+												<ul>
+														<li><a href="#step1" data-toggle="tab">1</a></li>
+														<li><a href="#step2" data-toggle="tab">2</a></li>
+														<li><a href="#step3" data-toggle="tab">3</a></li>
+														<li><a href="#step4" data-toggle="tab">4</a></li>
+												</ul>
+												<div class="progress progress-stripes progress-sm" style="margin:0">
+														<div class="progress-bar" data-color="theme"></div>
+												</div>
+												<div class="tab-content">
+														<div class="tab-pane fade" id="step1" parsley-validate parsley-bind> 
+																<h3>商品属性</h3><br>
+																<div class="form-group">
+																		<label class="control-label">商品名称</label>
+																		<input type="text" class="form-control"  parsley-required="true" placeholder="请输入商品名称">
+																</div>
+																<div class="form-group">
+																		<label class="control-label">商品材质</label>
+																		<input type="text" class="form-control"  parsley-rangelength="[1,32]"  parsley-required="true" parsley-trigger="keyup" placeholder="请输入商品材质">
+																</div>
+															<div class="form-group">
+																<label class="control-label">商品数量</label>
+																<input type="text" class="form-control"  parsley-rangelength="[1,32]"  parsley-required="true" parsley-trigger="keyup" placeholder="请输入商品数量">
+															</div>
+														</div>
+														<div class="tab-pane fade" id="step2" parsley-validate parsley-bind>
+																<h3>时间信息</h3><br>
+																<div class="form-group">
+																		<label class="control-label">入库时间</label>
+																		<input type="text" class="form-control"  parsley-trigger="keyup"  parsley-rangelength="[1,15]"  parsley-required="true" parsley-trigger="keyup" placeholder="请输入入库时间">
+																</div>
+																<!--<div class="form-group">-->
+																		<!--<label class="control-label">库存数量</label>-->
+																		<!--<input type="text" class="form-control" id="fullname" parsley-required="true" placeholder="请输入库存数量">-->
+																		<!--<div class="col-md-6">-->
+																		<!--<label class="control-label">Last Name</label>-->
+																		<!--<input type="text" class="form-control"  placeholder="Your last name">-->
+																		<!--</div>-->
+																<!--</div>-->
+																<!--<div class="form-group">-->
+																		<!--<label class="control-label">Password</label>-->
+																		<!--<input type="password" class="form-control" id="pword"  parsley-trigger="keyup"  parsley-rangelength="[4,8]"  parsley-required="true" placeholder="4-8 Characters">-->
+																<!--</div>-->
+																<!--<div class="form-group">-->
+																		<!--<label class="control-label">Confirm Password</label>-->
+																		<!--<input type="password" class="form-control"  parsley-trigger="keyup"  parsley-equalto="#pword" placeholder="Confirm Password" parsley-error-message="Password don't match" >-->
+																<!--</div>-->
+														</div>
+														<div class="tab-pane fade" id="step3">
+																<h3>操作人员</h3><br>
+																<div class="form-group">
+																		<label class="control-label">人员信息</label>
+																	<input type="text" class="form-control"  parsley-trigger="keyup"  parsley-rangelength="[1,15]"  parsley-required="true" parsley-trigger="keyup" placeholder="请输入人员信息">
+																</div>
+																<!--<div class="form-group row">-->
+																		<!--<div class="col-md-4">-->
+																		<!--<label class="control-label">City</label>-->
+																		<!--<input class="form-control" parsley-required="true" placeholder="Current city">-->
+																		<!--</div>-->
+																		<!--<div class="col-md-4">-->
+																		<!--<label class="control-label">State</label>-->
+																		<!--<select  class="selectpicker form-control" multiple>-->
+																				<!--<option value="Australia">Australia</option>-->
+																				<!--<option value="China">China</option>-->
+																				<!--<option value="Japan">Japan</option>-->
+																				<!--<option value="Thailand">Thailand</option>-->
+																				<!--<option value="United States">United States</option>-->
+																				<!--<option value="United Kingdom">United Kingdom</option>-->
+																		<!--</select>-->
+																		<!--</div>-->
+																		<!--<div class="col-md-4">-->
+																		<!--<label class="control-label">Zip Code</label>-->
+																		<!--<input type="text" class="form-control" parsley-required="true">-->
+																		<!--</div>-->
+																<!--</div>-->
+														</div>
+														<div class="tab-pane fade" id="step4">
+																<h3>输入成功 <span></span> .....</h3><br>
+																<p>商品条形码:
+																	<br>
+																	<svg class="barcode"
+																		 jsbarcode-format="upc"
+																		 jsbarcode-value="123456789012"
+																		 jsbarcode-textmargin="0"
+																		 jsbarcode-fontoptions="bold"></p>
+														</div>
+														<hr>
+														<footer class="row">
+															<div class="col-sm-4">
+																	<section class="wizard">
+																			<button type="button"  class="btn btn-inverse previous"><i class="fa fa-angle-left"></i> 上一步</button>
+																			<button type="button"  class="btn btn-theme next">下一步 <i class="fa fa-angle-right"></i></button>
+																	</section>
+															</div>
+															<div class="col-sm-8 align-lg-right"><div class="wizard-status">步骤进度 : <span></span></div></div>
+														</footer>
+												</div>
+										</form>
+										
+										
+								</div>
+								<!-- //content > row > col-lg-12 -->
+								
+						</div>
+						<!-- //content > row-->
+						
+				</div>
+				<!-- //content-->
+				
+				
+		</div>
+		<!-- //main-->
+{% endblock %}
+		
+{% block js %}
+<script>
+$(document).ready(function() {
+  	$('#rootwizard').bootstrapWizard({
+					tabClass:"nav-wizard",
+	                onTabShow: function(tab, navigation, index) {
+					   tab.prevAll().addClass('completed');
+						tab.nextAll().removeClass('completed');
+						if(tab.hasClass("active")){
+							tab.removeClass('completed');
+						}
+						var $total = navigation.find('li').length;
+						var $current = index+1;
+						var $percent = ($current/$total) * 100;
+						$('#rootwizard').find('.progress-bar').css({width:$percent+'%'});
+						$('#rootwizard').find('.wizard-status span').html($current+" / "+$total);
+                    }
+	});
+	
+	$('#validate-wizard').bootstrapWizard({
+			tabClass:"nav-wizard",
+			onNext: function(tab, navigation, index) {
+							var content=$('#step'+index);
+							if(typeof  content.attr("parsley-validate") != 'undefined'){
+											var $valid = content.parsley( 'validate' );
+											if(!$valid){
+															return false;
+											}
+							};
+			// Set the name for the next tab
+			$('#step4 h3').find("span").html($('#fullname').val());
+			},
+			onTabClick: function(tab, navigation, index) {
+							$.notific8('Please click <strong>next button</strong> to wizard next step!! ',{ life:5000, theme:"danger" ,heading:" Wizard Tip :); "});
+							return false;
+			},
+			onTabShow: function(tab, navigation, index) {
+							tab.prevAll().addClass('completed');
+							tab.nextAll().removeClass('completed');
+							if(tab.hasClass("active")){
+											tab.removeClass('completed');
+							}
+							var $total = navigation.find('li').length;
+							var $current = index+1;
+							var $percent = ($current/$total) * 100;
+							$('#validate-wizard').find('.progress-bar').css({width:$percent+'%'});
+							$('#validate-wizard').find('.wizard-status span').html($current+" / "+$total);
+			}
+	});
+
+
+});
+</script>
+<script type="text/javascript">
+	JsBarcode(".barcode").init();
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+.question_main{
+    margin: 20px auto;
+    padding: 10px 20px;
+    /*border: solid 1px rosybrown;*/
+    width: 90%;
+    background: #ffffff;
+}
+.red{
+    background: red;
+}
+.green{
+    background: green;
+}
+.yellow{
+    background: yellow;
+}
+.orange{
+    background: orange;
+}
+.cyan{
+    background: cyan;
+}
+.purple{
+    background: purple;
+}
+.floatRight{
+    float: right;
+}
+.headLeft{
+    width: 70%;
+    float: left;
+    line-height: 30px;
+}
+.headLeft span{
+    border-bottom: none;
+    font-size: 20px;
+}
+.headRight{
+    width: 30%;
+    float: left;
+    line-height: 30px;
+}
+.myBtns a{
+    margin-left: 10px;
+}
+.finished{
+    background: #00d872;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.gotIt{
+    background: #f5c700;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.shenhe{
+    background: #3cc4f8;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.daishenhe{
+    background: #0196de;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.published{
+    background: #fd0084;
+    padding: 4px 10px;
+    border-radius: 5px;
+}

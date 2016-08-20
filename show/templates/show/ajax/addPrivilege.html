@@ -1,0 +1,94 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;top:10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                        {% if "edit" == mode and privilege != null %}
+                            修改权限
+                        {% else %}
+                            新增权限
+                        {% endif %}
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/auth_ajaxAdd">
+                        {% csrf_token %}
+                        {% if privilege != null and mode == "edit" %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="privilege_id" value="{{ privilege.privilege_id }}"/>
+                        {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">权限名称</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="privilege_title"
+                                           placeholder="请输入权限名称" parsley-required="true"
+                        {% if privilege != null and mode == "edit" %} value="{{ privilege.privilege_title }}" {% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">菜单选择</label>
+
+                                <div class="col-lg-10">
+                                    <select name="menu_id" class="form-control"
+                                            type="select"  parsley-required="true">
+                                        {% for menu in menuList %}
+                                        <option value="{{ menu.menu_id }}" {%  if privilege != null and mode == "edit"  and menu.menu_id == privilege.menu_id %}selected="selected"{% endif %}>
+                                            {{ menu.menu_title }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">权限描述</label>
+
+                                <div class="col-lg-10">
+                                    <textarea name="action" class="form-control"
+                                              placeholder="请输入权限描述" parsley-required="true" >{% if privilege != null and mode == "edit" %}{{ privilege.action }}{% endif %}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+    $("#ajaxModule form").submit(function(e){
+        if (!$(this).parsley('validate')) {
+            e.preventDefault();
+        }else {
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "post",
+                data: $(this).serialize(),
+                success: function (e) {
+                    $("#ajaxModule").fadeOut();
+                    $("#ajaxModule").remove();
+                }
+            })
+        }
+    });
+
+
+</script>

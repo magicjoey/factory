@@ -1,0 +1,55 @@
+.marginTop20{
+    margin-top: 40px;
+ }
+.myTabs li{
+    margin-right: 10px;
+    background: #dddddd;
+}
+.borderLeft{
+    border-left: solid 1px #333333;
+}
+.companyLogo{
+    margin-top: 40px;
+}
+ .companyLogo li:nth-of-type(1){
+     margin-left: 0;
+ }
+.companyLogo li{
+    margin-left: 20px;
+}
+.paddingBottom{
+    padding-bottom: 100px;
+}
+.myGradient{
+    background-image: linear-gradient(to top,#000000,#dddddd);
+}
+.myBottomContainer{
+    padding: 100px 0;
+    width: 100%;
+    color: #ffffff;
+}
+.marginBT{
+    margin: 40px;
+}
+.myBigBtn{
+    font-size: 30px;
+    padding: 20px 40px;
+}
+
+.goodsBanner{
+    width:100%;
+}
+
+.goodsDesc{
+    font-size:25px;
+}
+
+.goodsDesc .money{
+    float:right;
+    font-weight: bold;
+    color:#E74C3C;
+}
+
+.goodsDesc .title{
+
+}

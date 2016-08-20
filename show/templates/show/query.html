@@ -1,0 +1,159 @@
+{% extends "show/common/base.html" %}
+{% block content %}
+		
+		
+		<!--
+		/////////////////////////////////////////////////////////////////////////
+		//////////     MAIN SHOW CONTENT     //////////
+		//////////////////////////////////////////////////////////////////////
+		-->
+		<div id="main">
+		
+		
+				<ol class="breadcrumb">
+						<li><a href="#">首页</a></li>
+						<li class="active">库存查询</li>
+				</ol>
+				<!-- //breadcrumb-->
+				
+				<div id="content">
+				
+						<div class="row">
+						
+								<div class="col-lg-12" >
+										<h1><strong>库存查询</strong> </h1>
+										<label class="color" style="background-color:#edece5">条形码工具</label>
+										
+										<form id="rootwizard" class="wizard-step">
+												<ul>
+														<li><a href="#tab1" data-toggle="tab">1</a></li>
+														<li><a href="#tab2" data-toggle="tab">2</a></li>
+														<li><a href="#tab3" data-toggle="tab">3</a></li>
+												</ul>
+												<div class="progress progress-stripes progress-sm" style="margin:0">
+														<div class="progress-bar" data-color="info"></div>
+												</div>
+												<div class="tab-content">
+														<div class="tab-pane fade" id="tab1"> 
+																<h3>步骤 : 1</h3>
+																<br>
+																<p>
+																	<label class="control-label">请输入编号</label>
+																	<input type="text" class="form-control"  parsley-rangelength="[1,32]"  parsley-required="true" parsley-trigger="keyup" placeholder="请输入条形码编号">
+																</p>
+														</div>
+														<div class="tab-pane fade" id="tab2">
+																<h3>步骤 : 2</h3>
+																<br>
+																<p>
+																	<label class="control-label">商品名</label>
+																	<span>名字</span>
+																	<br>
+																	<label class="control-label">商品库存</label>
+																	<span>库存量10件</span>
+																</p>
+														</div>
+														<div class="tab-pane fade" id="tab3">
+																<h3>步骤 : 3</h3>
+																<br>
+																<p>
+																	<label class="control-label">产地</label>
+																	<span>产地信息等</span>
+																	<br>
+																	<span>条形码:
+																		<br>
+																		<svg class="barcode"
+																				   jsbarcode-format="upc"
+																				   jsbarcode-value="123456789012"
+																				   jsbarcode-textmargin="0"
+																				   jsbarcode-fontoptions="bold">
+</svg></span>
+																</p>
+														</div>
+														<hr>
+														<footer class="row">
+															<div class="col-sm-4">
+																	<section class="wizard">
+																			<button type="button" class="btn btn-inverse previous"><i class="fa fa-angle-left"></i> 上一步</button>
+																			<button type="button" class="btn btn-theme next">下一步 <i class="fa fa-angle-right"></i></button>
+																	</section>
+															</div>
+															<div class="col-sm-8 align-lg-right"><div class="wizard-status">步骤进度 : <span></span></div></div>
+														</footer>
+												</div>
+										</form>
+										
+										<br><br>
+
+
+										
+								</div>
+								<!-- //content > row > col-lg-12 -->
+								
+						</div>
+						<!-- //content > row-->
+						
+				</div>
+				<!-- //content-->
+				
+				
+		</div>
+		<!-- //main-->
+		
+		{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function() {
+  	$('#rootwizard').bootstrapWizard({
+					tabClass:"nav-wizard",
+	                onTabShow: function(tab, navigation, index) {
+					   tab.prevAll().addClass('completed');
+						tab.nextAll().removeClass('completed');
+						if(tab.hasClass("active")){
+							tab.removeClass('completed');
+						}
+						var $total = navigation.find('li').length;
+						var $current = index+1;
+						var $percent = ($current/$total) * 100;
+						$('#rootwizard').find('.progress-bar').css({width:$percent+'%'});
+						$('#rootwizard').find('.wizard-status span').html($current+" / "+$total);
+                    }
+	});
+	
+	$('#validate-wizard').bootstrapWizard({
+			tabClass:"nav-wizard",
+			onNext: function(tab, navigation, index) {
+							var content=$('#step'+index);
+							if(typeof  content.attr("parsley-validate") != 'undefined'){
+											var $valid = content.parsley( 'validate' );
+											if(!$valid){
+															return false;
+											}
+							};
+			// Set the name for the next tab
+			$('#step4 h3').find("span").html($('#fullname').val());
+			},
+			onTabClick: function(tab, navigation, index) {
+							$.notific8('Please click <strong>next button</strong> to wizard next step!! ',{ life:5000, theme:"danger" ,heading:" Wizard Tip :); "});
+							return false;
+			},
+			onTabShow: function(tab, navigation, index) {
+							tab.prevAll().addClass('completed');
+							tab.nextAll().removeClass('completed');
+							if(tab.hasClass("active")){
+											tab.removeClass('completed');
+							}
+							var $total = navigation.find('li').length;
+							var $current = index+1;
+							var $percent = ($current/$total) * 100;
+							$('#validate-wizard').find('.progress-bar').css({width:$percent+'%'});
+							$('#validate-wizard').find('.wizard-status span').html($current+" / "+$total);
+			}
+	});
+
+});
+</script>
+<script type="text/javascript">
+	JsBarcode(".barcode").init();
+</script>
+{% endblock %}

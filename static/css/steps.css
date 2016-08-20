@@ -1,0 +1,479 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: #e7ebee;
+}
+button{
+    opacity: 0.6;
+}
+button:focus{
+    outline: none;
+}
+button:hover{
+    opacity:1;
+    text-decoration: underline;
+}
+.stepsHeader{
+    width: 100%;
+    height: 80px;
+    background: #899bb1;
+    text-align: center;
+    font-size: 1rem;
+    /*border-bottom: solid 1px #333333;*/
+}
+.stepBody{
+    width: 80%;
+    height: 80px;
+    margin: 0 auto;
+}
+.steps{
+    height: 80px;
+    line-height: 80px;
+    float: left;
+    /*padding-top: 20px;*/
+}
+.stepsLabel{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    background: #d8d8d8;
+    text-align: center;
+    line-height: 50px;
+    color: #ffffff;
+    vertical-align: middle;
+    border: solid 1px #9d9d9d;
+}
+.active{
+    background: #f3ab45;
+}
+.stepsLine{
+    width: 210px;
+    width: 15%;
+    height: 80px;
+    float: left;
+    background: url("../img/line.png") no-repeat 100%;
+}
+.selectTemplate{
+    width: 100%;
+    height: 70px;
+    line-height: 70px;
+    background: #f6f4f1;
+    border-bottom: solid 1px #333333;
+    text-indent: 1em;
+
+}
+.selectTemplate button{
+    margin-left: 10px;
+    width: 100px;
+    height: 32px;
+    font-size: 1rem;
+    background: #da4254;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+}
+.selectMiddle{
+    margin-left: 10px;
+}
+.selectBody{
+    height: 1000px;
+    overflow: hidden;
+}
+.seletItems{
+    float: left;
+    background: #ffffff;
+}
+.selectFirstPart{
+    float: left;
+    width: 160px;
+    height: 830px;
+    border-right:solid 1px #333333;
+    border-bottom: solid 1px #333333;
+}
+.selectFirstPart ul{
+    list-style: none;
+}
+.selectFirstPart ul li{
+    width: 160px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-bottom: solid 1px #9d9d9d;
+}
+.selectFirstPart ul li:hover{
+    background: #efe4d2;
+}
+.grade2th{
+    padding-top: 51px;
+}
+.grade2th ul li {
+    border-bottom: dashed 1px #9d9d9d;
+}
+.paperShow{
+    padding-left: 330px;
+    background: #f9fdf5;
+}
+.paper{
+    width: 80%;
+    margin: 50px auto;
+    /*height: 700px;*/
+    background:#ffffff;
+    border: solid 1px #999;
+    border-radius: 10px;
+    /*box-shadow: #999 4px 2px;*/
+}
+.blank{
+    height: 1px;
+    width: 100%;
+}
+.paperHead{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.paperHead label{
+    font-size: 2rem;
+}
+.paperBody{
+    height: 940px;
+    overflow: scroll;
+}
+.questionSingle{
+    padding: 5px;
+    height: 100px;
+    width: 80%;
+    margin: 5px auto;
+    border-bottom: dotted 1px grey;
+}
+.questionSingle:hover{
+    background: #FFEFCB;
+}
+.questionTitle{
+    line-height: 40px;
+    font-size: 16px;
+}
+.checkList{
+    margin: 5px 0 0 0;
+    padding: 5px 0;
+}
+.uploadFile{
+    margin: 5px 0 0 0;
+    padding: 5px 0;
+}
+.checkItem{
+    width: 33.33%;
+    height: 50px;
+    text-align: left;
+    float: left;
+}
+
+/*editor*/
+.templateEdit{
+    background: #e7ebee;
+    width: 100%;
+    height: 100%;
+}
+.editShow{
+    width: 49%;
+    float: left;
+}
+.editorMiddle{
+    width: 2%;
+    float: left;
+}
+.editor{
+    width: 49%;
+    float: left;
+    margin: 50px 10px;
+    background: #ffffff;
+}
+.editorHeader{
+    width: 100%;
+}
+.editorHeader ul{
+    width:100%;
+    height: 38px;
+    background: #e7ebee;
+}
+.editorHeader ul li{
+    list-style: none;
+    width: 100px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background: #e7ebee;
+    float: left;
+    cursor: pointer;
+}
+.editorHeader ul .editorActive{
+    background: #ffffff;
+}
+.formSetting,.addComponents,.editorComponents,.addLogical{
+    width: 100%;
+    /*height: 500px;*/
+    padding: 30px 20px;
+    background: #ffffff;
+}
+.formSetting input[type='button']{
+    width: 200px;
+    height: 30px;
+    background: #3398db;
+    border: none;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 4px;
+    opacity: 0.9;
+    color: #ffffff;
+}
+.formSetting input:hover{
+    opacity: 1;
+}
+.formSetting input:focus{
+    outline: none;
+}
+.formSetting input[type='text']{
+    width: 196px;
+    height: 26px;
+    text-indent: 1em;
+}
+.condition{
+    height: 130px;
+    /*margin-bottom: 100px;*/
+}
+.conditionLeft{
+    float: left;
+    width: 100px;
+    padding: 10px 0 0 10px;
+}
+.conditionRight{
+    float: left;
+    padding: 10px 0 0 10px;
+}
+.conditionLeft span{
+    margin-left: 5px;
+}
+
+.addComponents{
+    width: 100%;
+}
+.addComponents ul{
+    width: 300px;
+    padding: 10px 5px;
+}
+.addComponents ul li{
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    list-style: none;
+    border: solid  1px #9d9d9d;
+    float: left;
+    margin: 10px 5px;
+    text-align: center;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: border-radius .5s;
+}
+.addComponents ul li:hover{
+    background: #FFEFCB;
+    border-radius: 10px;
+    transition: border-radius .5s;
+}
+.editorComponents {
+    padding: 10px 15px;
+}
+.editorComponents button{
+    margin: 10px 0 ;
+    width: 100px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 20px;
+}
+.editorComponents input{
+    width: 200px;
+    height: 30px;
+    text-indent: 1em;
+}
+.operation{
+    margin: 10px 0;
+}
+.operationFlag{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: solid 1px #666666;
+    border-radius: 10px;
+}
+.removeOperation{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #00A6C7;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    text-indent: 0;
+    color: #ffffff;
+}
+.removeOperation:hover{
+    cursor: pointer;
+}
+.paddingLeft0{
+    padding-left: 0;
+}
+.hidden{
+    display: none;
+}
+
+.nextStep{
+    position:fixed;
+    right:50px;
+    text-decoration: none;
+    text-align: center;
+    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    line-height: 50px;
+    font-weight: bold;
+    font-size: 10px;
+    color:#fff;
+    background-color: #244050;
+}
+/*rmBtn:组建删除按钮*/
+.rmBtn:hover{
+    cursor: pointer;
+}
+/*singlyText*/
+.singlyText{
+    width: 80%;
+    margin: 0 auto 5px;
+    padding: 5px;
+    border-bottom: dotted 1px gray;
+}
+.singlyText:hover{
+    background: #FFEFCB;
+}
+.singlyText-title{
+    border-bottom: dashed 1px #dddddd;
+}
+.singlyText-description{
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    color: brown;
+}
+.singlyText-input{
+    margin: 5px 0 10px 0;
+}
+.singlyText textarea{
+    height: 66px;
+    width: 80%;
+    resize: none;
+    outline: 0 none;
+    font: 12px/1.0 "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    word-wrap: break-word;
+    color: #000;
+}
+.action5,.action6{
+    height: 130px;
+}
+.mySubmitBtns{
+    position: fixed;
+    left: 45%;
+    bottom: 40px;
+}
+.myStoreBtns{
+    position: fixed;
+    right: 15%;
+    bottom: 100px;
+}
+#content-wrapper{
+    min-width: 960px;
+}
+.logicOdds{
+    font-size: 16px;
+}
+.table tbody > tr > td:first-child{
+    font-size: 1em;
+}
+.table tbody > tr > td{
+    font-size: 1em;
+}
+.textRed{
+    color: red;
+}
+.clearFix{
+    clear: both;
+}
+.editorType4,.editorType5,.editorType6{
+    position: relative;
+}
+.setScore{
+    position: absolute;
+    right: 0;
+    top: -40px;
+    width: 40%;
+    z-index: 20;
+}
+.setScore input{
+    width: 80px;
+}
+.myStore{
+    margin-top: 10px;
+}
+.storeSingle{
+    border-radius: 5px;
+    padding: 5px 0px;
+    margin: 6px 0;
+}
+.storeSingle input{
+    margin-left: 20px;
+}
+.storeSingle span{
+    display: inline-block;
+    width: 35%;
+}
+.storeInputError{
+    text-align: center;
+    color: orangered;
+}
+.store span{
+    margin-left: 20px;
+}
+.storesList ul li{
+    list-style-type: none;
+}
+/*step1*/
+.modelList,.modelShow{
+    float: left;
+    width: 50%;
+}
+.modelShow{
+    margin: 20px 0;
+}
+.modelShowBody{
+    background: #ffffff;
+    margin: 0 10px;
+}
+.modelList{
+    padding: 20px 0;
+}
+.modelList ul li{
+    width: 50%;
+    float: left;
+    list-style-type: none;
+}
+.modelList ul li img{
+    width: 90%;
+
+}
+.modelList ul li p{
+    text-align: center;
+}
+/*step1*/

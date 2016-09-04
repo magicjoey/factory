@@ -1,0 +1,163 @@
+{% extends "show/common/base.html" %}
+{% load staticfiles %}
+{% block title %}销售管理{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/font-awesome.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.fixedHeader.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.tableTools.css" %}">
+{% endblock %}
+
+{% block content%}
+<div id="main">
+
+				<div id="content">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li><a href="/index/">主页</a></li>
+                        <li class="active"><span>销售管理</span></li>
+                    </ol>
+
+                    <h1>销售管理</h1>
+
+{#                    <button class="pull-right btn btn-success" id="addPrivilegeBtn" type="button"><i#}
+{#                            class="glyphicon glyphicon-plus"></i><span>新增菜单</span></button>#}
+                </div>
+            </div>
+            <div class="row">
+                <header class="main-box-header clearfix">
+                    <h2>&nbsp;</h2>
+                </header>
+                <div class="col-lg-12">
+                    <div class="main-box">
+
+                        <div class="main-box-body clearfix">
+                            <div class="table-responsive">
+                                    <table cellpadding="0" cellspacing="0" border="0"
+                                            class="table table-hover" id="table-main">
+                                        <thead>
+                                        <tr>
+                                            <th>序列号</th>
+                                            <th>商品编号</th>
+                                            <th>商品批次</th>
+                                            <th>销售日期</th>
+                                            <th>销售员ID</th>
+                                            <th>销售员姓名</th>
+                                            <th>仓库</th>
+                                            <th>数量</th>
+                                            <th>单位关系</th>
+                                            <th>销售价格</th>
+                                            <th>单位</th>
+                                            <th>备注</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody align="center">
+                                        {% for sale in saleList %}
+                                            <tr class="odd gradeX">
+                                                <td class="left">{{ sale.id }}</td>
+                                                <td class="left">{{ sale.commodity_id }}</td>
+                                                <td class="left">{{ sale.commodity_batch }}</td>
+                                                <td class="left">{{ sale.sale_date }}</td>
+                                                <td class="left">{{ sale.saler_id }}</td>
+                                                <td class="left">{{ sale.saler_name }}</td>
+                                                <td class="left">{{ sale.storage_id }}</td>
+                                                <td class="left">{{ sale.price }}</td>
+                                                <td class="left">{{ sale.num }}</td>
+                                                <td class="left">{{ sale.unit_relation }}</td>
+                                            <td class="left">{{ sale.unit }}</td>
+                                            <td class="left">{{ sale.memo }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                               </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>
+        <!-- //content > row > col-lg-12 -->
+
+    </div>
+
+
+        {% endblock %}
+
+{% block js %}
+
+<script src="{% static "js/jquery.dataTables.js" %}"></script>
+    <script src="{% static "js/dataTables.tableTools.js" %}"></script>
+	<script src="{% static "js/jquery.dataTables.bootstrap.js" %}"></script>
+<script type="text/javascript">
+
+    function fnShowHide(iCol, table) {
+        var oTable = $(table).dataTable();
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis(iCol, bVis ? false : true);
+    }
+
+    function ajaxEdit(id){
+        $.ajax({
+            url:'/auth_ajaxAddMenu?id='+id,
+            success:function(e){
+                $("body").append(e);
+            }
+        })
+    }
+
+    function ajaxDel(id){
+        if(confirm('确定删除该记录?')) {
+            window.location.href='/auth_ajaxDelMenu?id=' + id;
+{#            $.ajax({#}
+{#                url: '/auth_ajaxDelMenu?id=' + id,#}
+{#                success: function (e) {#}
+{#                    alert("删除成功");#}
+{#                }#}
+{#            })#}
+        }
+    }
+
+    $(function () {
+
+          var table = $('#table-main').dataTable({
+			'info': false,
+			'sDom': 'lTfr<"clearfix">tip',
+			'oTableTools': {
+	            'aButtons': [
+	            ]
+	        }
+		});
+
+
+
+        $("#addPrivilegeBtn").click(function(){
+            $.ajax({
+                url:'/auth_ajaxAddMenu',
+                success:function(e){
+                    $("body").append(e);
+                }
+            })
+        });
+
+        $(".ajaxEdit").click(function(e){
+            e.preventDefault();
+            ajaxEdit($(this).attr("id"));
+        })
+
+        $(".ajaxDel").click(function(e){
+            e.preventDefault();
+            ajaxDel($(this).attr("id"));
+        })
+
+
+
+    });
+</script>
+{% endblock %}

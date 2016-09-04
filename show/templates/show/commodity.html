@@ -1,0 +1,163 @@
+{% extends "show/common/base.html" %}
+{% load staticfiles %}
+{% block title %}采购管理{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/font-awesome.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.fixedHeader.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.tableTools.css" %}">
+{% endblock %}
+
+{% block content%}
+<div id="main">
+
+				<div id="content">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb">
+                        <li><a href="/index/">主页</a></li>
+                        <li class="active"><span>采购管理</span></li>
+                    </ol>
+
+                    <h1>采购管理</h1>
+
+{#                    <button class="pull-right btn btn-success" id="addPrivilegeBtn" type="button"><i#}
+{#                            class="glyphicon glyphicon-plus"></i><span>新增菜单</span></button>#}
+                </div>
+            </div>
+            <div class="row">
+                <header class="main-box-header clearfix">
+                    <h2>&nbsp;</h2>
+                </header>
+                <div class="col-lg-12">
+                    <div class="main-box">
+
+                        <div class="main-box-body clearfix">
+                            <div class="table-responsive">
+                                    <table cellpadding="0" cellspacing="0" border="0"
+                                            class="table table-hover" id="table-main">
+                                        <thead>
+                                        <tr>
+                                            <th>序列号</th>
+                                            <th>商品编号</th>
+                                            <th>商品名称</th>
+                                            <th>创建日期</th>
+                                            <th>单据编号</th>
+                                            <th>供应单位</th>
+                                            <th>供应单位缩写</th>
+                                            <th>部门</th>
+                                            <th>仓库名称</th>
+                                            <th>制单人</th>
+                                            <th>审核人</th>
+                                            <th>备注</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody align="center">
+                                        {% for commodity in commodityList %}
+                                            <tr class="odd gradeX">
+                                                <td class="left">{{ commodity.id }}</td>
+                                                <td class="left">{{ commodity.commodity_no }}</td>
+                                                <td class="left">{{ commodity.commodity_name }}</td>
+                                                <td class="left">{{ commodity.gmt_create }}</td>
+                                                <td class="left">{{ commodity.document_no }}</td>
+                                                <td class="left">{{ commodity.supplier_company }}</td>
+                                                <td class="left">{{ commodity.supplier_ab }}</td>
+                                                <td class="left">{{ commodity.department }}</td>
+                                                <td class="left">{{ commodity.storehouse_name }}</td>
+                                                <td class="left">{{ commodity.applier_name }}</td>
+                                                <td class="left">{{ commodity.auditor_name }}</td>
+                                            <td class="left">{{ commodity.memo }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                               </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>
+        <!-- //content > row > col-lg-12 -->
+
+    </div>
+
+
+        {% endblock %}
+
+{% block js %}
+
+<script src="{% static "js/jquery.dataTables.js" %}"></script>
+    <script src="{% static "js/dataTables.tableTools.js" %}"></script>
+	<script src="{% static "js/jquery.dataTables.bootstrap.js" %}"></script>
+<script type="text/javascript">
+
+    function fnShowHide(iCol, table) {
+        var oTable = $(table).dataTable();
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis(iCol, bVis ? false : true);
+    }
+
+    function ajaxEdit(id){
+        $.ajax({
+            url:'/auth_ajaxAddMenu?id='+id,
+            success:function(e){
+                $("body").append(e);
+            }
+        })
+    }
+
+    function ajaxDel(id){
+        if(confirm('确定删除该记录?')) {
+            window.location.href='/auth_ajaxDelMenu?id=' + id;
+{#            $.ajax({#}
+{#                url: '/auth_ajaxDelMenu?id=' + id,#}
+{#                success: function (e) {#}
+{#                    alert("删除成功");#}
+{#                }#}
+{#            })#}
+        }
+    }
+
+    $(function () {
+
+          var table = $('#table-main').dataTable({
+			'info': false,
+			'sDom': 'lTfr<"clearfix">tip',
+			'oTableTools': {
+	            'aButtons': [
+	            ]
+	        }
+		});
+
+
+
+        $("#addPrivilegeBtn").click(function(){
+            $.ajax({
+                url:'/auth_ajaxAddMenu',
+                success:function(e){
+                    $("body").append(e);
+                }
+            })
+        });
+
+        $(".ajaxEdit").click(function(e){
+            e.preventDefault();
+            ajaxEdit($(this).attr("id"));
+        })
+
+        $(".ajaxDel").click(function(e){
+            e.preventDefault();
+            ajaxDel($(this).attr("id"));
+        })
+
+
+
+    });
+</script>
+{% endblock %}

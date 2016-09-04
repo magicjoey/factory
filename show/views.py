@@ -8,47 +8,78 @@ from django.utils.datastructures import MultiValueDictKeyError
 import re
 from requests import Response
 from rest_framework.decorators import api_view
-from show.models import AuthRole, User,AuthPrivilege, AuthMenu, AuthUserRole, AuthRolePrivilege,AuthMenuLevel
+from show.models import AuthRole, User, AuthPrivilege, AuthMenu, AuthUserRole, AuthRolePrivilege, AuthMenuLevel, Sale, \
+    Storage, Commodity
 
 _SESSION_USER = "user"
+
 
 def index(request):
     return render(request, "show/index.html")
 
+
 def input(request):
     return render(request, "show/input.html")
+
 
 def output(request):
     return render(request, "show/output.html")
 
+
 def process(request):
     return render(request, "show/process.html")
+
 
 def progress(request):
     return render(request, "show/progress.html")
 
+
 def query(request):
     return render(request, "show/query.html")
 
+
 def recall(request):
     return render(request, "show/recall.html")
+
+
+def supplier(request):
+    return render(request, "show/supplier.html")
+
+def storage(request):
+    storageList = Storage.objects.all()
+    return render(request, "show/storage.html", {"storageList": storageList})
+
+def commodity(request):
+    commodityList = Commodity.objects.all()
+    return render(request, "show/commodity.html", {"commodityList": commodityList})
+
+
+def sale(request):
+    saleList = Sale.objects.all()
+    return render(request, "show/sale.html", {"saleList": saleList})
+
 
 def auth_list(request):
     privilegeList = AuthPrivilege.objects.all()
     return render(request, "show/auth/list.html", {"privilegeList": privilegeList})
 
+
 def auth_menu(request):
     menuList = AuthMenu.objects.all()
     return render(request, "show/auth/menu.html", {"menuList": menuList})
 
+
 def login(request):
     return render(request, "show/login.html", {})
+
 
 def profile(request):
     return render(request, "show/profile.html", {})
 
+
 def password(request):
     return render(request, "show/password.html")
+
 
 def auth_mine(request):
     sessionUser = request.session[_SESSION_USER]
@@ -61,9 +92,11 @@ def auth_mine(request):
         privilegeList = AuthPrivilege.objects.raw(sql, [user.id])
     return render(request, "show/auth/mine.html", {"privilegeList": privilegeList, "roleList": roleList})
 
+
 def auth_role(request):
     roleList = AuthRole.objects.all()
     return render(request, "show/auth/role.html", {"roleList": roleList})
+
 
 def auth_user(request):
     sessionUser = request.session["user"]
@@ -74,6 +107,7 @@ def auth_user(request):
     userList = list(User.objects.filter(belongingId=user.id, is_employee="Y"))
     userList.append(user)
     return render(request, "show/auth/user.html", {"userList": userList})
+
 
 def auth_ajaxAdd(request):
     if request.method == "GET":
@@ -102,7 +136,6 @@ def auth_ajaxAdd(request):
         privilege.save()
         # return HttpResponse({"code":"S","msg":"保存成功"})
         return HttpResponseRedirect("/show/auth_list")
-
 
 
 def auth_ajaxAddMenu(request):
@@ -212,6 +245,7 @@ def auth_ajaxAllotRolePrivilege(request):
             AuthRolePrivilege.objects.bulk_create(authRoleList)
         return HttpResponseRedirect("/authority/role")
 
+
 @api_view(['GET', 'POST'])
 def auth_ajaxAddUser(request):
     if request.method == "GET":
@@ -239,10 +273,10 @@ def auth_ajaxAddUser(request):
         try:
             mode = request.POST.get('mode')
             userStatus = "N"
-            assert nickName is not None , "用户名不可为空"
+            assert nickName is not None, "用户名不可为空"
             assert password is not None and 6 <= len(password) < 32, "密码不符合要求"
             if "edit" == mode and id is not None:
-                user = User.objects.get(id=id,belongingId=currentUser.id,is_employee="Y")
+                user = User.objects.get(id=id, belongingId=currentUser.id, is_employee="Y")
                 assert user is not None, "用户不可为空"
                 user.nickName = nickName
                 user.password = password
@@ -252,8 +286,10 @@ def auth_ajaxAddUser(request):
                 match = pattern.match(phoneNo)
                 if not match:
                     return Response({"status": "F", "msg": "手机号码格式不正确"})
-                user = User(phoneNo=phoneNo,nickName=nickName,password=password,status=userStatus,belongingId=currentUser.id,
-                            gmtCreate= datetime.now(), gmtUpdate= datetime.now(),is_superuser="F",is_company="F",is_employee="Y", role="EMPLOYEE")
+                user = User(phoneNo=phoneNo, nickName=nickName, password=password, status=userStatus,
+                            belongingId=currentUser.id,
+                            gmtCreate=datetime.now(), gmtUpdate=datetime.now(), is_superuser="F", is_company="F",
+                            is_employee="Y", role="EMPLOYEE")
             user.save()
         except IntegrityError:
             # return HttpResponse({"status": "F", "msg": "手机号已存在"}, Status.200)
@@ -264,7 +300,7 @@ def auth_ajaxAddUser(request):
 
 
 def auth_ajaxAllotUserRole(request):
-     if request.method == "GET":
+    if request.method == "GET":
         id = request.GET['id']
         if None != id:
             user = User.objects.get(id=id)
@@ -274,7 +310,7 @@ def auth_ajaxAllotUserRole(request):
                           {"user": user, "userRoleList": userRoleList, "roleList": roleList})
         else:
             raise Http404("请求错误")
-     elif request.method == "POST":
+    elif request.method == "POST":
         user_id = request.POST.get('user_id')
         roleIds = request.POST.getlist('roles')
         roleList = AuthUserRole.objects.filter(user_id=user_id)

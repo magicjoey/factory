@@ -1,10 +1,157 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extends "show/common/base.html" %}
+{% load staticfiles %}
+{% block title %}我的主页{% endblock %}
 
-</body>
-</html>
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/font-awesome.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.fixedHeader.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/libs/dataTables.tableTools.css" %}">
+{% endblock %}
+{% block content %}
+      <div id="main">
+
+
+				<ol class="breadcrumb">
+						<li><a href="#">首页</a></li>
+						<li class="active">个人信息</li>
+				</ol>
+				<!-- //breadcrumb-->
+
+				<div id="content">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="row">
+                <header class="main-box-header clearfix">
+                    <h2>&nbsp;</h2>
+                </header>
+                <div class="col-lg-12">
+                    <div class="main-box">
+
+                        <div class="main-box-body clearfix">
+                            <form class="form-horizontal" id="passwordForm" role="form" method="POST"
+                                  action="/accounts/profile" parsley-validate parsley-bind>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="inputEmail1" class="col-lg-2 control-label">昵称</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="nickName" name="nickName"
+                                               placeholder="请输入昵称" parsley-trigger="keyup"
+                                               parsley-rangelength="[1,11]" parsley-required="true"
+                                               parsley-error-message="昵称长度在1-11位之间" value="{{ userObj.nickName }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 control-label">性别</label>
+
+                                    <div class="col-lg-10">
+                                        <select class="form-control" name="sex">
+                                            <option value="2" {% if userObj.sex == 2 %}selected="selected"{% endif %}>
+                                                请选择
+                                            </option>
+                                            <option value="0" {% if userObj.sex == 0 %}selected="selected"{% endif %}>
+                                                男
+                                            </option>
+                                            <option value="1" {% if userObj.sex == 1 %}selected="selected"{% endif %}>
+                                                女
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 control-label">生日</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" parsley-trigger="keyup"
+                                               parsley-rangelength="[10,10]" placeholder="请输入yyyy-MM-dd格式出身日期"
+                                               parsley-error-message="长度不正确" name="birthday"
+                                               value="{{ userObj.birthday }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 control-label">支付宝</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="alipay" parsley-trigger="keyup"
+                                               parsley-rangelength="[5,32]" parsley-required="true"
+                                               placeholder="请输入支付宝账号（邮箱或手机号）" parsley-error-message="请输入手机号或邮箱"
+                                               name="alipay" value="{{ userObj.alipay }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 control-label">邮箱</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="email" parsley-trigger="keyup"
+                                               parsley-rangelength="[5,32]"
+                                               placeholder="5-32位邮箱" name="email" value="{{ userObj.email }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword1" class="col-lg-2 control-label">介绍</label>
+
+                                    <div class="col-lg-10">
+                                                    <textarea name="introduction" class="form-control"
+                                                              placeholder="请输入个人介绍" parsley-trigger="keyup"
+                                                              parsley-rangelength="[1,255]">{{ userObj.introduction }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="text-align: center;">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button type="submit" class="btn btn-success">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+
+    <script type="text/javascript" src="{% static "plugins/form/form.js" %}"></script>
+    <!-- theme scripts -->
+    {#<script src="{% static "js/scripts.js" %}"></script>#}
+    {#<script src="{% static "js/pace.min.js" %}"></script>#}
+
+    <!-- this page specific inline scripts -->
+    <script>
+        $(function () {
+            $("#passwordForm").submit(function (e) {
+                if (typeof  $(this).attr("parsley-validate") != 'undefined') {
+                    var $valid = $(this).parsley('validate');
+                    var $alipay = $("#alipay").val();
+
+                    if (!$valid || !check_alipay($alipay)) {
+                        e.preventDefault();
+                        if(!check_alipay($alipay)){
+                            alert("支付宝账号请输入邮箱或手机号");
+                        }
+                        return false;
+                    }
+                }
+                return true;
+            })
+
+            function check_alipay(str) {
+                var re = /^1\d{10}$/;
+                var re_email = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
+                if (re.test(str) || re_email.test(str)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        })
+
+    </script>
+{% endblock %}

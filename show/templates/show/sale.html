@@ -24,8 +24,8 @@
 
                     <h1>销售管理</h1>
 
-{#                    <button class="pull-right btn btn-success" id="addPrivilegeBtn" type="button"><i#}
-{#                            class="glyphicon glyphicon-plus"></i><span>新增菜单</span></button>#}
+                    <button class="pull-right btn btn-success" id="addSaleBtn" type="button"><i
+                            class="glyphicon glyphicon-plus"></i><span>新增销售</span></button>
                 </div>
             </div>
             <div class="row">
@@ -53,6 +53,7 @@
                                             <th>销售价格</th>
                                             <th>单位</th>
                                             <th>备注</th>
+                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody align="center">
@@ -70,6 +71,7 @@
                                                 <td class="left">{{ sale.unit_relation }}</td>
                                             <td class="left">{{ sale.unit }}</td>
                                             <td class="left">{{ sale.memo }}</td>
+                                            <td class="left"><a href="javascript:void(0);" id="{{ sale.id }}" class="ajaxEdit">编辑</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -105,7 +107,7 @@
 
     function ajaxEdit(id){
         $.ajax({
-            url:'/auth_ajaxAddMenu?id='+id,
+            url:'/ajax_add_sale?id='+id,
             success:function(e){
                 $("body").append(e);
             }
@@ -114,7 +116,7 @@
 
     function ajaxDel(id){
         if(confirm('确定删除该记录?')) {
-            window.location.href='/auth_ajaxDelMenu?id=' + id;
+            window.location.href='/?id=' + id;
 {#            $.ajax({#}
 {#                url: '/auth_ajaxDelMenu?id=' + id,#}
 {#                success: function (e) {#}
@@ -137,9 +139,9 @@
 
 
 
-        $("#addPrivilegeBtn").click(function(){
+        $("#addSaleBtn").click(function(){
             $.ajax({
-                url:'/auth_ajaxAddMenu',
+                url:'/ajax_add_sale',
                 success:function(e){
                     $("body").append(e);
                 }

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 # Create your models here.
@@ -72,7 +73,7 @@ class AuthUserRole(models.Model):
 class Commodity(models.Model):
     commodity_no = models.CharField(max_length=32, blank=True, null=True)
     commodity_name = models.CharField(max_length=32, blank=True, null=True)
-    gmt_create = models.DateTimeField(blank=True, null=True)
+    gmt_create = models.CharField(max_length=32, blank=True, null=True)
     document_no = models.CharField(max_length=32, blank=True, null=True)
     supplier_company = models.CharField(max_length=32, blank=True, null=True)
     supplier_ab = models.CharField(max_length=16, blank=True, null=True)
@@ -83,7 +84,7 @@ class Commodity(models.Model):
     applier_id = models.IntegerField(blank=True, null=True)
     auditor_id = models.IntegerField(blank=True, null=True)
     memo = models.CharField(max_length=64, blank=True, null=True)
-    gmt_modified = models.DateTimeField(blank=True, null=True)
+    gmt_modified = models.DateTimeField(blank=True, null=True,default=datetime.now())
     stock_num = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -92,12 +93,12 @@ class Commodity(models.Model):
 
 
 class Sale(models.Model):
-    commodity_id = models.CharField(max_length=32, blank=True, null=True)
+    commodity_no = models.CharField(max_length=32, blank=True, null=True)
     commodity_batch = models.CharField(max_length=64, blank=True, null=True)
-    sale_date = models.DateTimeField(blank=True, null=True)
+    sale_date = models.CharField(max_length=32,blank=True, null=True)
     saler_id = models.IntegerField(blank=True, null=True)
     saler_name = models.CharField(max_length=32, blank=True, null=True)
-    storage_id = models.IntegerField(blank=True, null=True)
+    storage_id = models.CharField(max_length=32, blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     num = models.IntegerField(blank=True, null=True)
     unit_relation = models.CharField(max_length=10, blank=True, null=True)
@@ -113,10 +114,11 @@ class Storage(models.Model):
     commodity_no = models.CharField(max_length=32, blank=True, null=True)
     commodity_batch = models.CharField(max_length=64, blank=True, null=True)
     commodity_name = models.CharField(max_length=32, blank=True, null=True)
-    gmt_create = models.DateTimeField(blank=True, null=True)
+    gmt_create = models.CharField(max_length=32, blank=True, null=True)
     supplier_relation = models.CharField(max_length=32, blank=True, null=True)
     direction = models.CharField(max_length=16, blank=True, null=True)
     storage = models.CharField(max_length=32, blank=True, null=True)
+    unit = models.CharField(max_length=32, blank=True, null=True)
     max_times = models.IntegerField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     num = models.IntegerField(blank=True, null=True)

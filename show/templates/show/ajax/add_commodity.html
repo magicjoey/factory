@@ -1,0 +1,186 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;    top: 10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                        {% if "edit" == mode and commodity != null %}
+                            编辑采购
+                        {% else %}
+                            新增采购
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/ajax_add_commodity/">
+                        {% csrf_token %}
+
+                            {% if "edit" == mode and commodity != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="commodity_id" value="{{ commodity.id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">商品编号</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_no"
+                                           placeholder="请输入商品编号" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.commodity_no}}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">商品名称</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_name"
+                                           placeholder="请输入商品名称" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.commodity_name}}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">创建日期</label>
+
+{#                                <div class="col-lg-10">#}
+
+{#                                   <div class="col-lg-10">#}
+                                <div class="input-group date form_datetime col-lg-10" data-picker-position="bottom-left" data-date-format="yyyy-MM-dd">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="gmt_create"
+                                           placeholder="请输入创建日期,格式yyy-mm-dd" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.gmt_create}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">单据编号</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="document_no"
+                                           placeholder="请输入单据编号" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.document_no}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">供应单位</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="supplier_company"
+                                           placeholder="请输入供应单位" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.supplier_company}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                         <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">供应单位缩写</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="supplier_ab"
+                                           placeholder="请输入供应单位缩写" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.supplier_ab}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">部门</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="department"
+                                           placeholder="请输入部门" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.department}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                         <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">仓库名称</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="storehouse_name"
+                                           placeholder="请输入仓库名称" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.storehouse_name}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">制单人</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="applier_name"
+                                           placeholder="请输入制单人" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.applier_name}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">审核人</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="auditor_name"
+                                           placeholder="请输入审核人" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.auditor_name}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">备注</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="memo"
+                                           placeholder="请输入备注" parsley-required="true" {% if "edit" == mode and commodity != null %}value="{{commodity.memo}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+{#    $("#ajaxModule form").submit(function(e){#}
+{#        e.preventDefault();#}
+{#        if (!$(this).parsley('validate')) {#}
+{#//            e.preventDefault();#}
+{#        }else {#}
+{#            $.ajax({#}
+{#                url: $(this).attr("action"),#}
+{#                type: "post",#}
+{#                data: $(this).serialize(),#}
+{#                success: function (e) {#}
+{#                    $("#ajaxModule").fadeOut();#}
+{#                    $("#ajaxModule").remove();#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    });#}
+
+
+</script>

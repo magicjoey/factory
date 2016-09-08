@@ -70,7 +70,10 @@ def auth_menu(request):
 
 
 def login(request):
-    return render(request, "show/login.html", {})
+    if request.method == "GET":
+        return render(request, "show/login.html", {})
+    elif request.method == "POST":
+        pass
 
 
 def profile(request):
@@ -78,7 +81,10 @@ def profile(request):
 
 
 def password(request):
-    return render(request, "show/password.html")
+    if request.method == "GET":
+        return render(request, "show/password.html")
+    elif request.method == "POST":
+        pass
 
 
 def auth_mine(request):
@@ -326,3 +332,109 @@ def auth_ajaxAllotUserRole(request):
                 userRoleList.append(userRole)
             AuthUserRole.objects.bulk_create(userRoleList)
         return HttpResponseRedirect("/authority/user")
+
+
+def ajax_add_storage(request):
+    if request.method == "GET":
+        try:
+            id = request.GET['id']
+            if None != id:
+                storage = Storage.objects.get(id=id)
+                return render(request, "show/ajax/add_storage.html", {"storage": storage, "mode": "edit"})
+        except User.DoesNotExist:
+            pass
+        except MultiValueDictKeyError:
+            pass
+        return render(request, "show/ajax/add_storage.html")
+    elif request.method == "POST":
+        mode = request.POST.get("mode")
+        global storage
+        if mode == "edit":
+            storage = Storage.objects.get(id=request.POST.get("storage_id"))
+        else:
+            storage = Storage()
+        storage.commodity_no = request.POST.get("commodity_no")
+        storage.commodity_batch = request.POST.get("commodity_batch")
+        storage.commodity_name = request.POST.get("commodity_name")
+        storage.gmt_create = request.POST.get("gmt_create")
+        storage.supplier_relation = request.POST.get("supplier_relation")
+        storage.direction = request.POST.get("direction")
+        storage.storage = request.POST.get("storage")
+        storage.max_times = request.POST.get("max_times")
+        storage.price = request.POST.get("price")
+        storage.num = request.POST.get("num")
+        storage.memo = request.POST.get("memo")
+        storage.unit = request.POST.get("unit")
+        storage.save()
+        return HttpResponseRedirect("/storage/")
+
+def ajax_add_commodity(request):
+    if request.method == "GET":
+        try:
+            id = request.GET['id']
+            if None != id:
+                commodity = Commodity.objects.get(id=id)
+                return render(request, "show/ajax/add_commodity.html", {"commodity": commodity, "mode": "edit"})
+        except User.DoesNotExist:
+            pass
+        except MultiValueDictKeyError:
+            pass
+        return render(request, "show/ajax/add_commodity.html")
+    elif request.method == "POST":
+        mode = request.POST.get("mode")
+        global commodity
+        if mode == "edit":
+            commodity = Commodity.objects.get(id=request.POST.get("commodity_id"))
+        else:
+            commodity = Commodity()
+        commodity.commodity_no = request.POST.get("commodity_no")
+        commodity.commodity_name = request.POST.get("commodity_name")
+        commodity.gmt_create = request.POST.get("gmt_create")
+        commodity.document_no = request.POST.get("document_no")
+        commodity.supplier_company = request.POST.get("supplier_company")
+        commodity.supplier_ab = request.POST.get("supplier_ab")
+        commodity.department = request.POST.get("department")
+        commodity.storehouse_name = request.POST.get("storehouse_name")
+        commodity.applier_name = request.POST.get("applier_name")
+        commodity.auditor_name = request.POST.get("auditor_name")
+        commodity.applier_id = request.POST.get("applier_id")
+        commodity.auditor_id = request.POST.get("auditor_id")
+        commodity.memo = request.POST.get("memo")
+        commodity.stock_num = request.POST.get("stock_num")
+        commodity.save()
+        return HttpResponseRedirect("/commodity/")
+
+
+
+def ajax_add_sale(request):
+    if request.method == "GET":
+        try:
+            id = request.GET['id']
+            if None != id:
+                sale = Sale.objects.get(id=id)
+                return render(request, "show/ajax/add_sale.html", {"sale": sale, "mode": "edit"})
+        except User.DoesNotExist:
+            pass
+        except MultiValueDictKeyError:
+            pass
+        return render(request, "show/ajax/add_sale.html")
+    elif request.method == "POST":
+        mode = request.POST.get("mode")
+        global commodity
+        if mode == "edit":
+            sale = Sale.objects.get(id=request.POST.get("sale_id"))
+        else:
+            sale = Sale()
+        sale.commodity_no = request.POST.get("commodity_no")
+        sale.commodity_batch = request.POST.get("commodity_batch")
+        sale.sale_date = request.POST.get("sale_date")
+        sale.saler_id = request.POST.get("saler_id")
+        sale.saler_name = request.POST.get("saler_name")
+        sale.storage_id = request.POST.get("storage_id")
+        sale.price = request.POST.get("price")
+        sale.num = request.POST.get("num")
+        sale.unit_relation = request.POST.get("unit_relation")
+        sale.unit = request.POST.get("unit")
+        sale.memo = request.POST.get("memo")
+        sale.save()
+        return HttpResponseRedirect("/sale/")

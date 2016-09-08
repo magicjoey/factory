@@ -1,0 +1,199 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;    top: 10%;"
+             class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                        {% if "edit" == mode and sale != null %}
+                            编辑销售
+                        {% else %}
+                            新增销售
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/ajax_add_sale/">
+                            {% csrf_token %}
+
+                            {% if "edit" == mode and sale != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="sale_id" value="{{ sale.id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">商品编号</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_no"
+                                           placeholder="请输入商品编号" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.commodity_no }}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">商品名称</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_name"
+                                           placeholder="请输入商品名称" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.commodity_name }}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">商品批次</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_batch"
+                                           placeholder="请输入商品批次" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.commodity_batch }}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">销售日期</label>
+
+                                {#                                <div class="col-lg-10">#}
+
+                                {#                                   <div class="col-lg-10">#}
+                                <div class="input-group date form_datetime col-lg-10" data-picker-position="bottom-left"
+                                     data-date-format="yyyy-MM-dd">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="sale_date"
+                                           placeholder="请输入销售日期,格式yyy-mm-dd" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.sale_date }}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">销售员ID</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="saler_id"
+                                           placeholder="请输入销售员ID" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.saler_id }}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">销售员姓名</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="saler_name"
+                                           placeholder="请输入销售员姓名" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.saler_name }}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">仓库</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="storage_id"
+                                           placeholder="请输入仓库" parsley-required="true"
+                                           {% if "edit" == mode and sale != null %}value="{{ sale.storage_id }}"{% endif %}/>
+
+                                </div>
+
+                                <div class="form-group"><label for="inputName"
+                                                               class="col-lg-2 control-label">销售价格</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text"
+                                               class="form-control"
+                                               name="price"
+                                               placeholder="请输入销售价格" parsley-required="true"
+                                               {% if "edit" == mode and sale != null %}value="{{ sale.price }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"><label for="inputName"
+                                                               class="col-lg-2 control-label">单位关系</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text"
+                                               class="form-control"
+                                               name="unit_relation"
+                                               placeholder="请输入单位关系" parsley-required="true"
+                                               {% if "edit" == mode and sale != null %}value="{{ sale.unit_relation }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"><label for="inputName"
+                                                               class="col-lg-2 control-label">单位</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text"
+                                               class="form-control"
+                                               name="unit"
+                                               placeholder="请输入单位" parsley-required="true"
+                                               {% if "edit" == mode and sale != null %}value="{{ sale.unit }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group"><label for="inputName"
+                                                               class="col-lg-2 control-label">备注</label>
+
+                                    <div class="col-lg-10">
+                                        <input type="text"
+                                               class="form-control"
+                                               name="memo"
+                                               placeholder="请输入备注" parsley-required="true"
+                                               {% if "edit" == mode and sale != null %}value="{{ sale.memo }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                    <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                                </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+    {#    $("#ajaxModule form").submit(function(e){#}
+    {#        e.preventDefault();#}
+    {#        if (!$(this).parsley('validate')) {#}
+    {#//            e.preventDefault();#}
+    {#        }else {#}
+    {#            $.ajax({#}
+    {#                url: $(this).attr("action"),#}
+    {#                type: "post",#}
+    {#                data: $(this).serialize(),#}
+    {#                success: function (e) {#}
+    {#                    $("#ajaxModule").fadeOut();#}
+    {#                    $("#ajaxModule").remove();#}
+    {#                }#}
+    {#            })#}
+    {#        }#}
+    {#    });#}
+
+
+</script>

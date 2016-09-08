@@ -1,0 +1,207 @@
+<div id="ajaxModule">
+    <div>
+        <div class="modal-backdrop in"></div>
+        <div tabindex="-1" role="dialog" style="display:block;    background-color: transparent;    top: 10%;" class="modal in">
+            <div class="modal-dialog">
+                <div class="modal-content" style="overflow:hidden;">
+                    <div class="modal-header">
+                        {% if "edit" == mode and storage != null %}
+                            编辑库存
+                        {% else %}
+                            新增库存
+                        {% endif %}
+
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4></div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
+                              data-parsley-validate
+                              action="/ajax_add_storage/">
+                        {% csrf_token %}
+
+                            {% if "edit" == mode and storage != null %}
+                                <input type="hidden" name="mode" value="{{ mode }}"/>
+                                <input type="hidden" name="storage_id" value="{{ storage.id }}"/>
+                            {% endif %}
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">商品编号</label>
+
+                                <div class="col-lg-10">
+
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_no"
+                                           placeholder="请输入商品编号" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.commodity_no}}"{% endif %}/>
+                                </div>
+                            </div>
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">商品批次</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="commodity_batch"
+                                           placeholder="请输入商品批次" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.commodity_batch}}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">商品名称</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="storage_name"
+                                           placeholder="请输入商品名称" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.commodity_name}}"{% endif %}/>
+                                </div>
+                            </div>
+                            <div class="form-group"><label
+                                    class="col-lg-2 control-label">创建日期</label>
+
+{#                                <div class="col-lg-10">#}
+
+{#                                   <div class="col-lg-10">#}
+                                <div class="input-group date form_datetime col-lg-10" data-picker-position="bottom-left" data-date-format="yyyy-MM-dd">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="gmt_create"
+                                           placeholder="请输入创建日期,格式yyy-mm-dd" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.gmt_create}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">单位关系</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="supplier_relation"
+                                           placeholder="请输入单位关系" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.supplier_relation}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">出库/入库</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="direction"
+                                           placeholder="请输入出库/入库" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.direction}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                         <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">仓库</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="storage"
+                                           placeholder="请输入仓库" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.storage}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">使用最大次数</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="max_times"
+                                           placeholder="请输入使用最大次数" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.max_times}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                         <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">数量</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="num"
+                                           placeholder="请输入数量" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.num}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">单位关系</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="unit_relation"
+                                           placeholder="请输入单位关系" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.unit_relation}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">价格</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="price"
+                                           placeholder="请输入价格" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.price}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">单位</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="unit"
+                                           placeholder="请输入单位" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.unit}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                        <div class="form-group"><label for="inputName"
+                                                           class="col-lg-2 control-label">备注</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="memo"
+                                           placeholder="请输入备注" parsley-required="true" {% if "edit" == mode and storage != null %}value="{{storage.memo}}"{% endif %}/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default closeBtn">关闭</button>
+                                <button class="btn btn-primary btn btn-success" type="submit">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#ajaxModule button.close,#ajaxModule button.closeBtn").click(function () {
+        $("#ajaxModule").fadeOut();
+        $("#ajaxModule").remove();
+    })
+
+{#    $("#ajaxModule form").submit(function(e){#}
+{#        e.preventDefault();#}
+{#        if (!$(this).parsley('validate')) {#}
+{#//            e.preventDefault();#}
+{#        }else {#}
+{#            $.ajax({#}
+{#                url: $(this).attr("action"),#}
+{#                type: "post",#}
+{#                data: $(this).serialize(),#}
+{#                success: function (e) {#}
+{#                    $("#ajaxModule").fadeOut();#}
+{#                    $("#ajaxModule").remove();#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    });#}
+
+
+</script>

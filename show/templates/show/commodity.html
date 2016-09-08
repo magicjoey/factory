@@ -24,8 +24,8 @@
 
                     <h1>采购管理</h1>
 
-{#                    <button class="pull-right btn btn-success" id="addPrivilegeBtn" type="button"><i#}
-{#                            class="glyphicon glyphicon-plus"></i><span>新增菜单</span></button>#}
+                    <button class="pull-right btn btn-success" id="addCommodity" type="button"><i
+                            class="glyphicon glyphicon-plus"></i><span>新增采购</span></button>
                 </div>
             </div>
             <div class="row">
@@ -53,6 +53,7 @@
                                             <th>制单人</th>
                                             <th>审核人</th>
                                             <th>备注</th>
+                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody align="center">
@@ -70,6 +71,7 @@
                                                 <td class="left">{{ commodity.applier_name }}</td>
                                                 <td class="left">{{ commodity.auditor_name }}</td>
                                             <td class="left">{{ commodity.memo }}</td>
+                                            <td class="left"><a href="javascript:void(0);" id="{{ commodity.id }}" class="ajaxEdit">编辑</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -95,6 +97,8 @@
 <script src="{% static "js/jquery.dataTables.js" %}"></script>
     <script src="{% static "js/dataTables.tableTools.js" %}"></script>
 	<script src="{% static "js/jquery.dataTables.bootstrap.js" %}"></script>
+    <script src="{% static "assets/plugins/datetime/datetime.js" %}"></script>
+
 <script type="text/javascript">
 
     function fnShowHide(iCol, table) {
@@ -105,7 +109,7 @@
 
     function ajaxEdit(id){
         $.ajax({
-            url:'/auth_ajaxAddMenu?id='+id,
+            url:'/ajax_add_commodity?id='+id,
             success:function(e){
                 $("body").append(e);
             }
@@ -137,14 +141,15 @@
 
 
 
-        $("#addPrivilegeBtn").click(function(){
+        $("#addCommodity").click(function(){
             $.ajax({
-                url:'/auth_ajaxAddMenu',
+                url:'/ajax_add_commodity',
                 success:function(e){
                     $("body").append(e);
                 }
             })
         });
+
 
         $(".ajaxEdit").click(function(e){
             e.preventDefault();

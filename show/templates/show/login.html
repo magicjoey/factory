@@ -152,16 +152,17 @@ $(function() {
 
 					// send username and password to php check login
 					$.ajax({
-						url: "/login", data: $(this).serialize(), type: "POST", dataType: 'json',
+						url: "/login/", data: $(this).serialize(), type: "POST", dataType: 'json',
 						success: function (e) {
 								setTimeout(function () { main.removeClass("slideDown") }, !e.status ? 500:3000);
-								 if (!e.status) {
+                                    console.info(e);
+								 if (!e || e.code!="S") {
 									 $.notific8('请检查用户名密码 !! ',{ life:5000,horizontalEdge:"bottom", theme:"danger" ,heading:" ERROR :); "});
 									return false;
 								 }
 								 setTimeout(function () { $("#loading-top span").text("登陆成功...") }, 500);
 								 setTimeout(function () { $("#loading-top span").text("页面跳转中...")  }, 1500);
-								 setTimeout( "window.location.href='/index'", 3100 );
+								 setTimeout( "window.location.href='/sale/'", 3100 );
 						}
 					});
 

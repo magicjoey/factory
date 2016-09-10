@@ -38,6 +38,12 @@ class AuthPrivilege(models.Model):
         managed = False
         db_table = 'tb_auth_privilege'
 
+class SaleStatistics(models.Model):
+    sale_date = models.CharField(max_length=20, null=True, blank=True)
+    saler_name = models.CharField(max_length=20, null=True, blank=True)
+    num = models.IntegerField()
+    price = models.FloatField()
+
 
 class AuthRole(models.Model):
     role_id = models.AutoField(primary_key=True)
@@ -62,7 +68,8 @@ class AuthRolePrivilege(models.Model):
 
 class AuthUserRole(models.Model):
     user_id = models.IntegerField()
-    role_id = models.IntegerField()
+    role_id = models.ForeignKey(AuthRole, on_delete=models.DO_NOTHING, verbose_name="角色", db_column="role_id",
+                                primary_key=True, unique=False)
 
     class Meta:
         managed = False
@@ -135,6 +142,7 @@ class User(models.Model):
     status = models.CharField(  max_length=1, blank=True, null=True)
     nickname = models.CharField(db_column='nickName', max_length=20, blank=True, null=True)  # Field name made lowercase.
     role = models.CharField(max_length=8)
+    introduction = models.CharField(db_column='introduction', max_length=255, blank=True, null=True)  # Field name made lowercase.
     gmt_create = models.DateTimeField(blank=True, null=True)
     gmt_modified = models.DateTimeField(blank=True, null=True)
 

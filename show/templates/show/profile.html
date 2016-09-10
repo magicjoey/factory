@@ -30,62 +30,16 @@
 
                         <div class="main-box-body clearfix">
                             <form class="form-horizontal" id="passwordForm" role="form" method="POST"
-                                  action="/accounts/profile" parsley-validate parsley-bind>
+                                  action="/profile/" parsley-validate parsley-bind>
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="inputEmail1" class="col-lg-2 control-label">昵称</label>
 
                                     <div class="col-lg-10">
-                                        <input type="text" class="form-control" id="nickName" name="nickName"
+                                        <input type="text" class="form-control" id="nickname" name="nickname"
                                                placeholder="请输入昵称" parsley-trigger="keyup"
                                                parsley-rangelength="[1,11]" parsley-required="true"
-                                               parsley-error-message="昵称长度在1-11位之间" value="{{ userObj.nickName }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword1" class="col-lg-2 control-label">性别</label>
-
-                                    <div class="col-lg-10">
-                                        <select class="form-control" name="sex">
-                                            <option value="2" {% if userObj.sex == 2 %}selected="selected"{% endif %}>
-                                                请选择
-                                            </option>
-                                            <option value="0" {% if userObj.sex == 0 %}selected="selected"{% endif %}>
-                                                男
-                                            </option>
-                                            <option value="1" {% if userObj.sex == 1 %}selected="selected"{% endif %}>
-                                                女
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword1" class="col-lg-2 control-label">生日</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" class="form-control" parsley-trigger="keyup"
-                                               parsley-rangelength="[10,10]" placeholder="请输入yyyy-MM-dd格式出身日期"
-                                               parsley-error-message="长度不正确" name="birthday"
-                                               value="{{ userObj.birthday }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword1" class="col-lg-2 control-label">支付宝</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" class="form-control" id="alipay" parsley-trigger="keyup"
-                                               parsley-rangelength="[5,32]" parsley-required="true"
-                                               placeholder="请输入支付宝账号（邮箱或手机号）" parsley-error-message="请输入手机号或邮箱"
-                                               name="alipay" value="{{ userObj.alipay }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword1" class="col-lg-2 control-label">邮箱</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" class="form-control" id="email" parsley-trigger="keyup"
-                                               parsley-rangelength="[5,32]"
-                                               placeholder="5-32位邮箱" name="email" value="{{ userObj.email }}">
+                                               parsley-error-message="昵称长度在1-11位之间" value="{{ user.nickname }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -94,7 +48,7 @@
                                     <div class="col-lg-10">
                                                     <textarea name="introduction" class="form-control"
                                                               placeholder="请输入个人介绍" parsley-trigger="keyup"
-                                                              parsley-rangelength="[1,255]">{{ userObj.introduction }}</textarea>
+                                                              parsley-rangelength="[1,255]">{{ user.introduction }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group" style="text-align: center;">
@@ -130,26 +84,13 @@
                     var $valid = $(this).parsley('validate');
                     var $alipay = $("#alipay").val();
 
-                    if (!$valid || !check_alipay($alipay)) {
+                    if (!$valid) {
                         e.preventDefault();
-                        if(!check_alipay($alipay)){
-                            alert("支付宝账号请输入邮箱或手机号");
-                        }
                         return false;
                     }
                 }
                 return true;
             })
-
-            function check_alipay(str) {
-                var re = /^1\d{10}$/;
-                var re_email = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/
-                if (re.test(str) || re_email.test(str)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
 
         })
 

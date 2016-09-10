@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^query/', views.query),
     url(r'^recall/', views.recall),
     url(r'^sale/', views.sale),
+    url(r'^sale_statistics/', views.sale_statistics),
     url(r'^commodity/', views.commodity),
     url(r'^storage/', views.storage),
     url(r'^ajax_add_commodity/', views.ajax_add_commodity),
@@ -48,6 +49,8 @@ urlpatterns = [
     url(r'^auth_ajaxAddUser/', views.auth_ajaxAddUser),
     url(r'^auth_ajaxAllotUserRole/', views.auth_ajaxAllotUserRole),
     url(r'^login/', views.login),
+    url(r'^logout/', views.logout),
     url(r'^profile/', views.profile),
     url(r'^password/', views.password),
+    url(r'^', views.commodity),
 ]

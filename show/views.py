@@ -1,15 +1,27 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+    @author: Magic Joey
+    @contact: outlierw@gmail.com
+    @site: http://underestimated.me
+    @project: mystery
+    @description:
+    @version: 2016-09-01 12:19,views V1.0
+"""
 import datetime
+import json
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
 from django.utils.datastructures import MultiValueDictKeyError
 import re
-from requests import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from show.models import AuthRole, User, AuthPrivilege, AuthMenu, AuthUserRole, AuthRolePrivilege, AuthMenuLevel, Sale, \
-    Storage, Commodity
+    Storage, Commodity, UserRole, SaleStatistics
 
 _SESSION_USER = "user"
 
@@ -45,9 +57,11 @@ def recall(request):
 def supplier(request):
     return render(request, "show/supplier.html")
 
+
 def storage(request):
     storageList = Storage.objects.all()
     return render(request, "show/storage.html", {"storageList": storageList})
+
 
 def commodity(request):
     commodityList = Commodity.objects.all()
@@ -69,29 +83,124 @@ def auth_menu(request):
     return render(request, "show/auth/menu.html", {"menuList": menuList})
 
 
+@api_view(['GET', 'POST'])
 def login(request):
     if request.method == "GET":
         return render(request, "show/login.html", {})
     elif request.method == "POST":
-        pass
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        try:
+            assert username is not None  # , "用户名不可为空"
+            assert password is not None  # , "密码不可为空"
+        except AssertionError as e:
+            return __json_response("F", e)
+
+        users = User.objects.filter(user_name=username)
+        if users is not None and users.count() > 0:
+            user = users[0]
+            # if user.status != 'S':
+            #     return Response(userLoginReq.data, status=status.HTTP_403_FORBIDDEN)
+            if user.password != password:
+                return __json_response("F", "用户名密码错误")
+            __update_session_user(user, request)
+            try:
+                userRole = UserRole.objects.get(role=user.role)
+                userRoleSerial = {"role": userRole.role, "name": userRole.name}
+                request.session["userRole"] = userRoleSerial
+                menu = queryMenu(user.id)
+                request.session['menu'] = menu
+            except UserRole.DoesNotExist:
+                pass
+            return __json_response("S", "登陆成功")
+        else:
+            return __json_response("F", "用户名不存在")
+
+
+def queryMenu(userId):
+    sql = "select * from tb_auth_menu where menu_id in(select menu_id from tb_auth_privilege where privilege_id in (select privilege_id from tb_auth_role_privilege ap where ap.role_id in(select role_id from tb_auth_user_role ur where ur.user_id= %s ))) and type='MENU' order by weight"
+    menuList = AuthMenu.objects.raw(sql, [userId])
+    # menuList = AuthMenu.objects.filter(menu_level=1, type="MENU").order_by("weight")
+    menuStr = ""
+    for menu in menuList:
+        menuStr += menu.content
+    return menuStr
+
+
+def __update_session_user(user, request):
+    userSerial = {"user_id": user.id, "userName": user.user_name, "status": user.status,
+                  "nickname": user.nickname, "role": user.role, "introduction": user.introduction}
+    request.session["user"] = userSerial
 
 
 def profile(request):
-    return render(request, "show/profile.html", {})
+    if request.method == "GET":
+        user = __get_session_user(request)
+        return render(request, "show/profile.html", {"user": user})
+    elif request.method == "POST":
+        user = __get_session_user(request)
+        user.nickname = request.POST.get("nickname")
+        user.introduction = request.POST.get("introduction")
+        user.save()
+        __update_session_user(user, request)
+        return HttpResponseRedirect("/profile/")
 
 
 def password(request):
     if request.method == "GET":
         return render(request, "show/password.html")
     elif request.method == "POST":
+        user = __get_session_user(request)
+        old_password = request.POST.get("old_password")
+        new_password = request.POST.get("new_password")
+        if user.password != old_password:
+            return HttpResponseRedirect("/password/?msg=旧密码不正确")
+        if new_password is None or len(new_password) < 6:
+            return HttpResponseRedirect("/password/?msg=密码为空或小于6位")
+        user.password = new_password
+        user.save()
+        return HttpResponseRedirect("/logout/")
+
+
+def sale_statistics(request):
+    if request.method == "GET":
+        return render(request, "show/sale_statistics.html")
+    elif request.method == "POST":
         pass
+
+
+def ajax_sale_statistics(request):
+    from_date = request.GET.get("from_date")
+    to_date = request.GET.get("to_date")
+    sql = "select sale_date,saler_name,count(1) cnt,sum(price) price from tb_sale group by sale_date,saler_name order by saler_name,sale_date"
+    ssList = SaleStatistics.objects.raw(sql)
+    total_sql = "select sale_date,count(1) cnt,sum(price) price from tb_sale group by sale_date order by sale_date"
+    totalSsList = SaleStatistics.objects.raw(total_sql)
+    return_json = []
+    date_list = []
+    total_data = []
+    for total in totalSsList:
+        total_data.append(total.price)
+        date_list.append(total.sale_date)
+    return_json['total'] = total_data
+    return_json['date'] = date_list
+
+    single_data = []
+    return_json['data'] = []
+    return_json['data'].append(total_data)
+    for i in range(0, len(date_list)):
+        pass
+
+
+
+    return HttpResponse(json.dumps(return_json), status.HTTP_200_OK)
 
 
 def auth_mine(request):
     sessionUser = request.session[_SESSION_USER]
-    user = User.objects.get(phoneNo=sessionUser['phoneNo'])
+    user = User.objects.get(id=sessionUser['user_id'])
     roleList = AuthUserRole.objects.filter(user_id=user.id)
-    if user.is_superuser == "Y":
+    if user.role == "ADMIN":
         privilegeList = AuthPrivilege.objects.all().order_by("privilege_id")
     else:
         sql = "select * from tb_auth_privilege where privilege_id in (select privilege_id from tb_auth_role_privilege ap where ap.role_id in(select role_id from tb_auth_user_role ur where ur.user_id= %s))"
@@ -107,10 +216,9 @@ def auth_role(request):
 def auth_user(request):
     sessionUser = request.session["user"]
 
-    user = User.objects.get(phoneNo=sessionUser['phoneNo'])
-    # if user.is_company != "Y":
-    #     raise Http404("您没有这个页面的权限")
-    userList = list(User.objects.filter(belongingId=user.id, is_employee="Y"))
+    user = User.objects.get(id=sessionUser['user_id'])
+    userList = list()
+    # list(User.objects.filter(belongingId=user.id, is_employee="Y"))
     userList.append(user)
     return render(request, "show/auth/user.html", {"userList": userList})
 
@@ -368,6 +476,7 @@ def ajax_add_storage(request):
         storage.save()
         return HttpResponseRedirect("/storage/")
 
+
 def ajax_add_commodity(request):
     if request.method == "GET":
         try:
@@ -405,7 +514,6 @@ def ajax_add_commodity(request):
         return HttpResponseRedirect("/commodity/")
 
 
-
 def ajax_add_sale(request):
     if request.method == "GET":
         try:
@@ -438,3 +546,20 @@ def ajax_add_sale(request):
         sale.memo = request.POST.get("memo")
         sale.save()
         return HttpResponseRedirect("/sale/")
+
+
+def logout(request):
+    try:
+        # 不存在时会报错
+        del request.session["user"]
+    except KeyError:
+        pass
+    return HttpResponseRedirect('/login/')
+
+
+def __json_response(code, msg):
+    return HttpResponse(json.dumps({"code": code, "msg": msg}), status.HTTP_200_OK)
+
+
+def __get_session_user(request):
+    return User.objects.get(id=request.session['user']['user_id'])

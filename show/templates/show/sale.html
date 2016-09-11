@@ -107,7 +107,7 @@
 
     function ajaxEdit(id){
         $.ajax({
-            url:'/ajax_add_sale?id='+id,
+            url:'/ajax_add_sale/?id='+id,
             success:function(e){
                 $("body").append(e);
             }
@@ -141,7 +141,7 @@
 
         $("#addSaleBtn").click(function(){
             $.ajax({
-                url:'/ajax_add_sale',
+                url:'/ajax_add_sale/',
                 success:function(e){
                     $("body").append(e);
                 }

@@ -100,7 +100,7 @@
 
     function ajaxEdit(id){
         $.ajax({
-            url:'/auth_ajaxAddMenu?id='+id,
+            url:'/auth_ajaxAddMenu/?id='+id,
             success:function(e){
                 $("body").append(e);
             }
@@ -109,7 +109,7 @@
 
     function ajaxDel(id){
         if(confirm('确定删除该记录?')) {
-            window.location.href='/auth_ajaxDelMenu?id=' + id;
+            window.location.href='/auth_ajaxDelMenu/?id=' + id;
 {#            $.ajax({#}
 {#                url: '/auth_ajaxDelMenu?id=' + id,#}
 {#                success: function (e) {#}
@@ -134,7 +134,7 @@
 
         $("#addPrivilegeBtn").click(function(){
             $.ajax({
-                url:'/auth_ajaxAddMenu',
+                url:'/auth_ajaxAddMenu/',
                 success:function(e){
                     $("body").append(e);
                 }

@@ -6287,8 +6287,10 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 }
 
 .modal-body {
-  max-height: none;
-  overflow: visible;
+  /*max-height: none;*/
+  /*overflow: visible;*/
+      max-height: 350px;
+    overflow: scroll;
 }
 
 .modal-footer {

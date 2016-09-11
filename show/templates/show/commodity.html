@@ -109,7 +109,7 @@
 
     function ajaxEdit(id){
         $.ajax({
-            url:'/ajax_add_commodity?id='+id,
+            url:'/ajax_add_commodity/?id='+id,
             success:function(e){
                 $("body").append(e);
             }
@@ -143,7 +143,7 @@
 
         $("#addCommodity").click(function(){
             $.ajax({
-                url:'/ajax_add_commodity',
+                url:'/ajax_add_commodity/',
                 success:function(e){
                     $("body").append(e);
                 }

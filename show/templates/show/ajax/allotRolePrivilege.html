@@ -7,7 +7,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true">×</button>
                         <h4 class="modal-title">角色权限管理: {{ role.role_name }}</h4></div>
-                    <form method="post" action="/auth_ajaxAllotRolePrivilege">
+                    <form method="post" action="/auth_ajaxAllotRolePrivilege/">
                     <div class="modal-body" style="    max-height: 500px;overflow-y: scroll;">
                         <input type="hidden" name="role_id" value="{{ role.role_id }}"/>
                         {% csrf_token %}
@@ -27,7 +27,7 @@
                                 <td><input
                                         type="checkbox" name="privileges" value="{{ privilege.privilege_id }}"
                                         {% for prv in rolePrivilegeList %}
-                                            {% if prv.privilege_id.privilege_id == privilege.privilege_id %}
+                                            {% if prv.privilege_id == privilege.privilege_id %}
                                             checked="checked"
                                             {% endif %}
 

@@ -39,6 +39,7 @@ class AuthPrivilege(models.Model):
         db_table = 'tb_auth_privilege'
 
 class SaleStatistics(models.Model):
+    id = models.AutoField(primary_key=True)
     sale_date = models.CharField(max_length=20, null=True, blank=True)
     saler_name = models.CharField(max_length=20, null=True, blank=True)
     num = models.IntegerField()

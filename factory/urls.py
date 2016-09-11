@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^auth_ajaxAllotRolePrivilege/', views.auth_ajaxAllotRolePrivilege),
     url(r'^auth_ajaxAddUser/', views.auth_ajaxAddUser),
     url(r'^auth_ajaxAllotUserRole/', views.auth_ajaxAllotUserRole),
+    url(r'^ajax_sale_statistics/', views.ajax_sale_statistics),
     url(r'^login/', views.login),
     url(r'^logout/', views.logout),
     url(r'^profile/', views.profile),

@@ -123,7 +123,7 @@
 
     function ajaxDel(id) {
         if (confirm('确定删除该记录?')) {
-            window.location.href= '/auth_ajaxDelRole?id=' + id;
+            window.location.href= '/auth_ajaxDelRole/?id=' + id;
 {#            $.ajax({#}
 {#                url: '/auth_ajaxDelRole?id=' + id,#}
 {#                success: function (e) {#}
@@ -135,7 +135,7 @@
 
     function ajaxAllot(id){
         $.ajax({
-            url: '/auth_ajaxAllotRolePrivilege?id=' + id,
+            url: '/auth_ajaxAllotRolePrivilege/?id=' + id,
             success: function (e) {
                 $("body").append(e);
             }
@@ -155,7 +155,7 @@
 
         $("#addPrivilegeBtn").click(function () {
             $.ajax({
-                url: '/auth_ajaxAddRole',
+                url: '/auth_ajaxAddRole/',
                 success: function (e) {
                     $("body").append(e);
                 }

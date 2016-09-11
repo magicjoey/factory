@@ -122,7 +122,7 @@
 
     function ajaxDel(id){
         if(confirm('确定删除该记录?')) {
-            window.location.href='/ajax_add_storage?id=' + id;
+            window.location.href='/ajax_add_storage/?id=' + id;
 {#            $.ajax({#}
 {#                url: '/auth_ajaxDelMenu?id=' + id,#}
 {#                success: function (e) {#}
@@ -147,7 +147,7 @@
 
         $("#addStorageBtn").click(function(){
             $.ajax({
-                url:'/ajax_add_storage',
+                url:'/ajax_add_storage/',
                 success:function(e){
                     $("body").append(e);
                 }

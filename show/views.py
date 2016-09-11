@@ -8,7 +8,7 @@
     @description:
     @version: 2016-09-01 12:19,views V1.0
 """
-import datetime
+from datetime import datetime
 import json
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -122,8 +122,16 @@ def queryMenu(userId):
     menuList = AuthMenu.objects.raw(sql, [userId])
     # menuList = AuthMenu.objects.filter(menu_level=1, type="MENU").order_by("weight")
     menuStr = ""
+    is_first = True
     for menu in menuList:
+
+        if menu.menu_level_id == 1 and not is_first:
+            menuStr += "</ul></li>"
+        if is_first:
+            is_first = False
         menuStr += menu.content
+        if menu.menu_level_id == 1:
+            menuStr += "<ul>"
     return menuStr
 
 
@@ -172,27 +180,44 @@ def sale_statistics(request):
 def ajax_sale_statistics(request):
     from_date = request.GET.get("from_date")
     to_date = request.GET.get("to_date")
-    sql = "select sale_date,saler_name,count(1) cnt,sum(price) price from tb_sale group by sale_date,saler_name order by saler_name,sale_date"
-    ssList = SaleStatistics.objects.raw(sql)
-    total_sql = "select sale_date,count(1) cnt,sum(price) price from tb_sale group by sale_date order by sale_date"
-    totalSsList = SaleStatistics.objects.raw(total_sql)
-    return_json = []
+    if from_date is None or from_date == '':
+        from_date = '2016-01-01'
+    if to_date is None or to_date == '':
+        to_date = '2020-12-31'
+    sql = "select max(id) id,sale_date,saler_name,count(1) cnt,sum(price) price from tb_sale where sale_date>=%s and sale_date<=%s group by sale_date,saler_name order by saler_name,sale_date"
+    ssList = SaleStatistics.objects.raw(sql,[from_date, to_date])
+    total_sql = "select max(id) id,sale_date,count(*) cnt,sum(price) price from tb_sale where sale_date>=%s and sale_date<=%s group by sale_date order by sale_date"
+    totalSsList = SaleStatistics.objects.raw(total_sql,[from_date, to_date])
+    return_json = {}
     date_list = []
     total_data = []
     for total in totalSsList:
         total_data.append(total.price)
         date_list.append(total.sale_date)
-    return_json['total'] = total_data
+    # return_json['total'] = total_data
     return_json['date'] = date_list
 
     single_data = []
     return_json['data'] = []
-    return_json['data'].append(total_data)
-    for i in range(0, len(date_list)):
-        pass
+    return_json['data'].append({"name":"合计", "data": total_data})
 
+    saler_json = {}
+    for sale in ssList:
 
+        if saler_json.get(sale.saler_name) is None:
+            saler_json[sale.saler_name] = []
+        saler_json[sale.saler_name].append(sale)
 
+    for (k, s_s_json) in saler_json.items():
+        single_json = []
+        index = 0
+        for i in range(0, len(date_list)):
+            if s_s_json[index].sale_date == date_list[i]:
+                single_json.append(s_s_json[index].price)
+                index += 1
+            else:
+                single_json.append(0)
+        return_json['data'].append({"name": k, "data": single_json})
     return HttpResponse(json.dumps(return_json), status.HTTP_200_OK)
 
 
@@ -217,9 +242,9 @@ def auth_user(request):
     sessionUser = request.session["user"]
 
     user = User.objects.get(id=sessionUser['user_id'])
-    userList = list()
+    userList = User.objects.all()
     # list(User.objects.filter(belongingId=user.id, is_employee="Y"))
-    userList.append(user)
+    # userList.append(user)
     return render(request, "show/auth/user.html", {"userList": userList})
 
 
@@ -321,14 +346,14 @@ def auth_ajaxAddRole(request):
         else:
             role = AuthRole(role_name=role_name, role_shortname=role_shortname)
         role.save()
-        return HttpResponseRedirect("/authority/role")
+        return HttpResponseRedirect("/auth_role/")
 
 
 def auth_ajaxDelRole(request):
     id = request.GET.get("id")
     authRole = AuthRole.objects.get(role_id=id)
     authRole.delete()
-    return HttpResponseRedirect("/authority/role")
+    return HttpResponseRedirect("/auth_role/")
 
 
 def auth_ajaxAllotRolePrivilege(request):
@@ -354,63 +379,55 @@ def auth_ajaxAllotRolePrivilege(request):
                     privilege = AuthPrivilege.objects.get(privilege_id=privilegeId)
                 except AuthPrivilege.DoesNotExist:
                     continue
-                authRole = AuthRolePrivilege(role_id=role_id, privilege_id=privilege)
+                authRole = AuthRolePrivilege(role_id=role_id, privilege_id=privilegeId)
                 authRoleList.append(authRole)
             AuthRolePrivilege.objects.bulk_create(authRoleList)
-        return HttpResponseRedirect("/authority/role")
+        return HttpResponseRedirect("/auth_role/")
 
 
 @api_view(['GET', 'POST'])
 def auth_ajaxAddUser(request):
     if request.method == "GET":
         try:
-            id = request.GET['id']
+            id = request.GET.get('id')
             if None != id:
-                user = User.objects.get(id=id, is_employee="Y")
+                user = User.objects.get(id=id)
                 return render(request, "show/ajax/addUser.html", {"user": user, "mode": "edit"})
         except User.DoesNotExist:
-            try:
-                user = User.objects.get(id=id, is_company="Y")
-                return render(request, "show/ajax/addUser.html", {"user": user, "mode": "edit"})
-            except User.DoesNotExist:
-                pass
+            pass
         except MultiValueDictKeyError:
             pass
         return render(request, "show/ajax/addUser.html")
     elif request.method == "POST":
-        sessionUser = request.session[_SESSION_USER]
-        currentUser = User.objects.get(phoneNo=sessionUser['phoneNo'])
+        currentUser = __get_session_user(request)
         id = request.POST.get('id')
-        nickName = request.POST.get('nickName')
+        nickname = request.POST.get('nickname')
         password = request.POST.get("password")
-        phoneNo = request.POST.get("phoneNo")
+        username = request.POST.get("username")
         try:
             mode = request.POST.get('mode')
             userStatus = "N"
-            assert nickName is not None, "用户名不可为空"
+            assert username is not None, "用户名不可为空"
             assert password is not None and 6 <= len(password) < 32, "密码不符合要求"
             if "edit" == mode and id is not None:
-                user = User.objects.get(id=id, belongingId=currentUser.id, is_employee="Y")
+                user = User.objects.get(id=id)
                 assert user is not None, "用户不可为空"
-                user.nickName = nickName
+                user.user_name = username
                 user.password = password
-                user.gmtUpdate = datetime.now()
+                user.nickname = nickname
+                user.gmt_modified = datetime.now()
             else:
-                pattern = re.compile('^0\d{2,3}\d{7,8}$|^1[358]\d{9}$|^147\d{8}$')
-                match = pattern.match(phoneNo)
-                if not match:
-                    return Response({"status": "F", "msg": "手机号码格式不正确"})
-                user = User(phoneNo=phoneNo, nickName=nickName, password=password, status=userStatus,
-                            belongingId=currentUser.id,
-                            gmtCreate=datetime.now(), gmtUpdate=datetime.now(), is_superuser="F", is_company="F",
-                            is_employee="Y", role="EMPLOYEE")
+                assert len(username)>=2, "用户名不符合要求"
+                user = User(user_name=username, nickname=nickname, password=password,
+                            gmt_create=datetime.now(), gmt_modified=datetime.now())
             user.save()
         except IntegrityError:
             # return HttpResponse({"status": "F", "msg": "手机号已存在"}, Status.200)
-            return Response({"status": "F", "msg": "手机号已存在"})
+            return Response({"status": "F", "msg": "户名已存在"})
         except AssertionError as e:
             return Response({"status": "F", "msg": e})
-        return Response({"userId": user.id, "status": "S"})
+        return HttpResponseRedirect("/auth_user/")
+        # return Response({"userId": user.id, "status": "S"})
 
 
 def auth_ajaxAllotUserRole(request):
@@ -439,7 +456,7 @@ def auth_ajaxAllotUserRole(request):
                 userRole = AuthUserRole(user_id=user_id, role_id=role)
                 userRoleList.append(userRole)
             AuthUserRole.objects.bulk_create(userRoleList)
-        return HttpResponseRedirect("/authority/user")
+        return HttpResponseRedirect("/auth_user/")
 
 
 def ajax_add_storage(request):

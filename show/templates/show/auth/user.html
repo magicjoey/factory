@@ -43,7 +43,7 @@
                                         <tr>
                                             <th>编号</th>
                                             <th>昵称</th>
-                                            <th>登录手机号</th>
+                                            <th>登录名</th>
                                             <th>创建时间</th>
                                             <th>操作</th>
                                         </tr>
@@ -52,9 +52,9 @@
                                         {% for user in userList %}
                                             <tr class="odd gradeX">
                                                 <td>{{ user.id }}</td>
-                                                <td>{{ user.nickName }}</td>
-                                                <td>{{ user.phoneNo }}</td>
-                                                <td>{{ user.gmtCreate }}</td>
+                                                <td>{{ user.nickname }}</td>
+                                                <td>{{ user.user_name }}</td>
+                                                <td>{{ user.gmt_create }}</td>
                                                 <td class="center">
                                                     <a href="javascript:ajaxAllot('{{ user.id }}')"
                                                        class="ajaxAllot" id="{{ user.id }}"><span
@@ -100,7 +100,7 @@
 
     $("#addPrivilegeBtn").click(function () {
                 $.ajax({
-                    url: '/auth_ajaxAddUser',
+                    url: '/auth_ajaxAddUser/',
                     success: function (e) {
                         $("body").append(e);
                     }
@@ -109,7 +109,7 @@
 
     function ajaxEdit(id) {
         $.ajax({
-            url: '/auth_ajaxAddUser?id=' + id,
+            url: '/auth_ajaxAddUser/?id=' + id,
             success: function (e) {
                 $("body").append(e);
             }
@@ -118,7 +118,7 @@
 
     function ajaxAllot(id){
         $.ajax({
-            url: '/auth_ajaxAllotUserRole?id=' + id,
+            url: '/auth_ajaxAllotUserRole/?id=' + id,
             success: function (e) {
                 $("body").append(e);
             }

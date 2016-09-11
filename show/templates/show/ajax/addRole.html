@@ -16,7 +16,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal" method="post" id="formAjaxId" data-collabel="3"
                               data-parsley-validate
-                              action="/auth_ajaxAddRole">
+                              action="/auth_ajaxAddRole/">
                             {% csrf_token %}
                        {% if "edit" == mode and role != null %}
                                 <input type="hidden" name="mode" value="{{ mode }}"/>

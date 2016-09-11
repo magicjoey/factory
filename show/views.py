@@ -105,8 +105,8 @@ def login(request):
                 return __json_response("F", "用户名密码错误")
             __update_session_user(user, request)
             try:
-                userRole = UserRole.objects.get(role=user.role)
-                userRoleSerial = {"role": userRole.role, "name": userRole.name}
+                userRole = AuthUserRole.objects.get(user_id=user.id)
+                userRoleSerial = {"role": userRole.role_id.role_id, "name": userRole.role_id.role_name}
                 request.session["userRole"] = userRoleSerial
                 menu = queryMenu(user.id)
                 request.session['menu'] = menu
